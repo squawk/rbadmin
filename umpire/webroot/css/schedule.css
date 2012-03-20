@@ -1,0 +1,57 @@
+.schedule-table .titleRowSt {
+	color:#fff;
+	font-weight:bold;
+	background-color:#CD8C31;
+	padding:1px 0 1px 4px;
+	border-right:1px solid #06562D;
+	border-bottom:1px solid #06562D; 
+	} 
+	
+.schedule-table .title-row {
+	color:#fff;
+	font-weight:bold;
+	background-color:#999;
+	padding:1px 0 1px 4px;
+	border-right:1px solid #666;
+	border-bottom:1px solid #666; 
+	} 
+	
+.schedule-table td.time-change {
+	background-color: pink;
+	}
+
+
+.schedule-table td.error {
+	padding:10px;
+	border:1px solid #ddd;
+	}
+	
+.schedule-table td {
+	font-size:11px;
+	background-color:#eee;
+	border-right:1px solid #ddd;
+	border-bottom:1px solid #ddd;
+	padding:1px 2px 1px 4px;
+	}
+	
+.schedule-table td img {
+	border:0;
+	vertical-align:middle;
+	}
+
+.schedule-table .cancelled {
+   color: red;
+   text-decoration: line-through;
+}
+
+.schedule-table .makeup {
+   color: purple;
+}
+
+.schedule-date {
+	font-weight:bold;
+	font-size:13px;
+	color:#333;
+	margin-top: 10px;
+	/*margin-bottom:-10px;*/
+	}
