@@ -2160,3 +2160,105 @@
 2012-03-20 15:58:14 Error: [MissingControllerException] Controller class JsController could not be found.
 #0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
 #1 {main}
+2012-03-21 23:21:55 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:48:53 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:49:05 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:50:00 Error: [MissingViewException] View file "/Users/bvanskyh/Development/rbadmin/umpire/View/Umpires/register.ctp" is missing.
+#0 /Users/bvanskyh/Development/rbadmin/lib/Cake/View/View.php(460): View->_getViewFileName(NULL)
+#1 /Users/bvanskyh/Development/rbadmin/lib/Cake/Controller/Controller.php(962): View->render(NULL, NULL)
+#2 /Users/bvanskyh/Development/rbadmin/lib/Cake/Routing/Dispatcher.php(110): Controller->render()
+#3 /Users/bvanskyh/Development/rbadmin/lib/Cake/Routing/Dispatcher.php(85): Dispatcher->_invoke(Object(UmpiresController), Object(CakeRequest), Object(CakeResponse))
+#4 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#5 {main}
+2012-03-25 20:50:00 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:52:01 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:56:01 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:56:20 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:56:38 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:56:58 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:57:07 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:57:12 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:58:01 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:58:12 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:58:20 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 20:59:25 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:01:10 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:01:49 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:02:29 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:02:38 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:02:51 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:15 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:20 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:24 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:27 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:31 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:37 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:39 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:41 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2012-03-25 21:03:59 Error: [MissingActionException] Action Umpires::change_password() could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/lib/Cake/Controller/Scaffold.php(151): Scaffold->_scaffold(Object(CakeRequest))
+#1 /Users/bvanskyh/Development/rbadmin/lib/Cake/Controller/Controller.php(533): Scaffold->__construct(Object(UmpiresController), Object(CakeRequest))
+#2 /Users/bvanskyh/Development/rbadmin/lib/Cake/Controller/Controller.php(492): Controller->_getScaffold(Object(CakeRequest))
+#3 /Users/bvanskyh/Development/rbadmin/lib/Cake/Routing/Dispatcher.php(103): Controller->invokeAction(Object(CakeRequest))
+#4 /Users/bvanskyh/Development/rbadmin/lib/Cake/Routing/Dispatcher.php(85): Dispatcher->_invoke(Object(UmpiresController), Object(CakeRequest), Object(CakeResponse))
+#5 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#6 {main}
+2012-03-25 21:03:59 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}

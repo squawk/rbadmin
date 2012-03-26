@@ -3,6 +3,12 @@ class UmpiresController extends AppController {
 
 	public $scaffold;
 	
+	public function beforeFilter()
+	{
+	   parent::beforeFilter();
+	   $this->Auth->allow('register');
+	}
+	
    /**
      * Log into the system.
      * Take information from the user and have it validated and handle it accordingly
@@ -46,11 +52,34 @@ class UmpiresController extends AppController {
 				$this->redirect('/');
 			} else {
 				$this->Session->setFlash(__('Your profile could not be saved. Please, try again.'));
+				unset($this->request->data['Umpire']['password']);
+				unset($this->request->data['Umpire']['password_confirmation']);
 			}
 		} else {
 			$this->request->data = $this->Umpire->read(null, $id);
 		}
 	}
+	
+	/**
+    * register method
+    *
+    * @return void
+    */
+   public function register() {
+      if ($this->Auth->user('id'))
+      {
+         return $this->redirect('profile');
+      }
+   	if ($this->request->is('post')) {
+   		$this->Umpire->create();
+   		if ($this->Umpire->save($this->request->data)) {
+   			$this->Session->setFlash(__('Your account has been created'));
+   			$this->redirect(array('action' => 'login'));
+   		} else {
+   			$this->Session->setFlash(__('Your account could not be created. Please, try again.'));
+   		}
+   	}
+   }
 
 
 }
