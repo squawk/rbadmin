@@ -211,7 +211,8 @@ class GamesController extends AppController {
             }
 
             // Get teams and (sometimes) times
-            $pattern = "/\(.*\)/";
+            $time_pattern = "/\(.*\)/";
+            $field_pattern = "/@.*/";
             $temp_time = false;
             foreach (array('mon', 'tue', 'wed', 'thu', 'fri', 'sat') as $day)
             {
@@ -224,12 +225,20 @@ class GamesController extends AppController {
                      $temp_time = false;
                   }
 
-                  if (preg_match($pattern, $teams, $matches))
+                  if (preg_match($time_pattern, $teams, $matches))
                   {
                      $temp_time = $time;
                      $new_time = $matches[0];
                      $teams = trim(str_replace($new_time, '', $teams));
                      $time = str_replace(array('(', ')'), array('', ''), $new_time);
+                  }
+
+                  $new_field = null;
+                  if (preg_match($field_pattern, $teams, $matches))
+                  {
+                     $new_field = $matches[0];
+                     $teams = trim(str_replace($new_field, '', $teams));
+                     $new_field = trim(str_replace('@', '', $new_field));
                   }
 
                   $my_time = $date[$day] . ' ' . $time;
@@ -258,7 +267,7 @@ class GamesController extends AppController {
          					'league_id' => $league,
          					'home_team' => $home,
          					'away_team' => $away,
-         					'field_id' => $this->_field($league, $field),
+         					'field_id' => $this->_field($league, is_null($new_field) ? $field : $new_field),
          					'game_time' => $my_time,
          				);
          				$games[] = $new_game;
@@ -266,6 +275,8 @@ class GamesController extends AppController {
                } // !empty($teams)
             } // foreach
          } // $rows
+         
+         pr($games); exit;
          
          $this->Game->deleteAll(array('Game.league_id' => array(7, 8, 9)));
    		$this->Game->saveAll($games);
@@ -299,7 +310,15 @@ class GamesController extends AppController {
 			$fields = Set::combine($fields, '{n}.Field.name', '{n}.Field.id');
 		}
 		
-		return empty($fields[$name]) ? $league_id : $fields[$name];
+		if (!isset($fields[$name]))
+		{
+		   $new = array('league_id' => $league_id, 'name' => $name);
+		   $this->Field->create();
+		   $this->Field->save($new);
+		   $fields[$name] = $this->Field->id;
+		}
+		
+		return empty($fields[$name]) ? 0 : $fields[$name];
 	}
 	
 	private function _gametime($d, $t)
