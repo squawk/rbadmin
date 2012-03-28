@@ -249,11 +249,11 @@ class GamesController extends AppController {
                      $home = trim($split[0]);
                      $away = trim($split[1]);
 
-                     if (strpos($home, 'RBR') !== false)
+                     if (strpos($home, 'RBR') !== false or strpos($away, 'RBR') !== false)
                      {
                         $league = 9;
                      }
-                     else if (strpos($home, 'RP') !== false)
+                     else if (strpos($home, 'RP') !== false or strpos($away, 'RP') !== false)
                      {
                         $league = 7;
                      }
