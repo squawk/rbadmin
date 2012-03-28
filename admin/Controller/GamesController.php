@@ -276,8 +276,6 @@ class GamesController extends AppController {
             } // foreach
          } // $rows
          
-         pr($games); exit;
-         
          $this->Game->deleteAll(array('Game.league_id' => array(7, 8, 9)));
    		$this->Game->saveAll($games);
 		}
