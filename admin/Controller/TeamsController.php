@@ -72,4 +72,35 @@ class TeamsController extends AppController
 		$this->Session->setFlash(__('Team was not deleted', true));
 		$this->redirect(array('action' => 'index'));
 	}
+	
+	public function standings($league_id = null)
+	{
+		if ($this->request->is('post')) 
+		{
+		   foreach ($this->request->data['Team'] as $team)
+		   {
+		      if ($team['id'])
+		      {
+		         $this->Team->id = $team['id'];
+		         $this->Team->save($team);
+		      }
+		   }
+		   $this->Session->setFlash('Standings updated');
+		   $league_id = 0;
+		}
+		
+		if ($league_id)
+		{
+			$this->Team->League->contain();
+			$league = $this->Team->League->find('first', array('conditions' => array('id' => $league_id)));
+			$this->Team->contain();
+			$teams = $this->Team->find('all', array('conditions' => array('league_id' => $league_id)));
+			$this->set(compact('league', 'teams'));
+		}
+		
+		$leagues = $this->Team->League->find('list', array('conditions' => array('id > 2')));
+		$this->set(compact('leagues'));
+		
+	}
+	
 }
