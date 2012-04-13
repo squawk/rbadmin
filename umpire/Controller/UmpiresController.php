@@ -6,7 +6,7 @@ class UmpiresController extends AppController {
 	public function beforeFilter()
 	{
 	   parent::beforeFilter();
-	   $this->Auth->allow('register');
+	   $this->Auth->allow(array('register', 'all'));
 	}
 	
    /**
@@ -79,6 +79,11 @@ class UmpiresController extends AppController {
    			$this->Session->setFlash(__('Your account could not be created. Please, try again.'));
    		}
    	}
+   }
+   
+   public function all()
+   {
+   	return $this->Umpire->find('list');
    }
 
 

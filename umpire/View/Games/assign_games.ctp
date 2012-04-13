@@ -20,11 +20,17 @@
 </tbody>
 </table>
 <?php else: ?>
-<h2>Schedule This Week</h2>
+	<?php if ($week): ?>
+	<h2>Upcoming Schedule</h2>
+	<?php echo $this->Html->link('<< Previous Week', array('controller' => 'games', 'action' => 'assign_games', $week - 1)); ?>
+	&nbsp;*&nbsp;
+	<?php else: ?>
+	<h2>Schedule This Week</h2>
+	<?php endif; ?>
+	<?php echo $this->Html->link('Next Week >>', array('controller' => 'games', 'action' => 'assign_games', $week + 1)); ?>
 <?php endif; ?>
 <?php $startTable = true; ?>
 <?php $dayBreak = true; ?>
-<a name="<?php echo $game['League']['slug'] ?>"></a>
 <div class="schedule-date"><?php echo $textLeague; ?></div>
 <table class="schedule-table" width="100%" cellpadding="2" cellspacing="1" border="0">
 <thead>
@@ -35,7 +41,7 @@
 	<td class="title-row" width="15%">Away Team</td>
 	<td class="title-row" width="15%">Field</td>
 	<td class="title-row" width="15%">Umpire</td>
-	<!--<td class="title-row" width="15%">Field Umpire</td>-->
+	<td class="title-row" width="15%">All Umpires</td>
 </tr>
 </thead>
 <tbody>
@@ -43,7 +49,7 @@
 
 <?php if ($dayBreak): ?>
 <tr style="background-color: #ffffff">
-   <td colspan="6" align="center" class="schedule-date">
+   <td colspan="7" align="center" class="schedule-date">
    <?php echo $textDate ?>
    </td>
 </tr>
@@ -86,15 +92,14 @@
       <?php endif; ?>
 	   &nbsp;
 	</td>
-	<!--
 	<td>
-      <?php $available = @Set::diff($requests[$game['Game']['game_time']], $schedules[$game['Game']['game_time']]) ?>
-      <?php foreach ($available as $id => $name): ?>
-         <?php echo $this->Html->link($name, array('controller' => 'games', 'action' => 'assign', $game['Game']['id'], $id)), '<br/>' ?>
-      <?php endforeach; ?>
+	   <?php if (!isset($game['Schedule']['umpire_id'])): ?>
+	      <?php foreach ($umpires as $id => $name): ?>
+   	      <?php echo $this->Html->link($name, array('controller' => 'games', 'action' => 'assign', $game['Game']['id'], $id)), '<br/>' ?>
+      	<?php endforeach; ?>
+      <?php endif; ?>
 	   &nbsp;
 	</td>
-	-->
 </tr>
 <?php endforeach; ?>
 </tbody>

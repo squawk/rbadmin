@@ -1,4 +1,5 @@
 <?php $games = $this->requestAction('games/schedule'); ?>
+<?php $umpires = $this->requestAction('umpires/all'); ?>
 <?php $schedule = $this->params['action'] == 'schedule'; ?>
 <?php echo $this->Html->css('schedule')?>
 <div class="games">
@@ -77,12 +78,8 @@
    <?php endif; ?>
 	</td>
 	<td>
-	   <?php if (isset($game['Schedule']['User'])): ?>
-	      <strong><?php echo $game['Schedule']['User']['name']; ?></strong>
-              <?php if ($schedule): ?>
-              <?php if ($game['Schedule']['User']['cell_phone']) echo '<br/>C:', $game['Schedule']['User']['cell_phone']; ?>
-              <?php if ($game['Schedule']['User']['home_phone']) echo '<br/>H:', $game['Schedule']['User']['home_phone']; ?>
-              <?php endif; ?>
+	   <?php if (isset($game['Schedule']['umpire_id'])): ?>
+	      <strong><?php echo $umpires[$game['Schedule']['umpire_id']]; ?></strong>
       <?php endif; ?>
 	   &nbsp;
 	</td>

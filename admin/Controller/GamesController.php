@@ -116,12 +116,12 @@ class GamesController extends AppController {
 			else if ($league_id < 7)
 			{
 				$games = $this->_load_calripken($league_id, $filename);
-				$this->Session->setFlash($games . ' games loaded.');
+				if ($games) $this->Session->setFlash($games . ' games loaded.');
 			}
 			else
 			{
 				$games = $this->_load_baberuth($league_id, $filename);
-				$this->Session->setFlash($games . ' games loaded.');			   
+				if ($games) $this->Session->setFlash($games . ' games loaded.');			   
 			}
 		}
 		$leagues = $this->Game->League->find('list');
@@ -137,6 +137,7 @@ class GamesController extends AppController {
 		$keys = array('date', 'time', 'field', 'home', 'v', 'away', 'type');
 		$skip = true;
 		$games = array();
+		$this->errors = array();
 		if ($rows)
 		{
 			foreach($rows as $r)
@@ -162,6 +163,13 @@ class GamesController extends AppController {
 				);
 				$games[] = $new_game;
 			}
+			
+			if (count($this->errors))
+			{
+				$this->Session->setFlash(implode('<br>', $this->errors));
+				return false;
+			}
+			
 			$this->Game->deleteAll(array('Game.league_id' => $league_id));
 			$this->Game->saveAll($games);
 		}
@@ -308,7 +316,7 @@ class GamesController extends AppController {
 			$fields = Set::combine($fields, '{n}.Field.name', '{n}.Field.id');
 		}
 		
-		if (!isset($fields[$name]))
+		if (!empty($name) and !isset($fields[$name]))
 		{
 		   $new = array('league_id' => $league_id, 'name' => $name);
 		   $this->Field->create();
@@ -316,7 +324,7 @@ class GamesController extends AppController {
 		   $fields[$name] = $this->Field->id;
 		}
 		
-		return empty($fields[$name]) ? 0 : $fields[$name];
+		return empty($fields[$name]) ? $league_id : $fields[$name];
 	}
 	
 	private function _gametime($d, $t)
@@ -325,6 +333,7 @@ class GamesController extends AppController {
 		$time = $this->_formatTime($t);
 		if ($date == null)
 		{
+			$this->errors[] = 'Invalid game time: ' . $d;
 			return null;
 		}
 		return $date . ' ' . $time;

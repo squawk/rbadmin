@@ -1,5 +1,5 @@
-/admin/tmp
-/umpire/tmp
+/admin/tmp/
+/umpire/tmp/
 /lib/Cake/Console/Templates/skel/tmp/
 /plugins
 /vendors

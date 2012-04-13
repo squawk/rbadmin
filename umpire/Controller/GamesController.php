@@ -64,12 +64,13 @@ class GamesController extends AppController
          'COUNT(*) AS count'
          );
       $conditions = array(
+         'Game.league_id' => array(4,5,6),
          'MONTH(Game.game_time)' => $month,
          'OR' => array(
             'WEEK(Game.game_time) >' => $week,
             array(
                'WEEK(Game.game_time) >' => $week - 1,
-               'Game.makeup' => 1,
+               //'Game.makeup' => 1,
                'Game.game_time >= CURRENT_DATE()'
                ),
             ),
@@ -112,11 +113,12 @@ class GamesController extends AppController
    function schedule()
    {
       $conditions = array(
-         'WEEK(Game.game_time) = WEEK(CURRENT_DATE())',
+         'WEEK(Game.game_time) BETWEEN WEEK(CURRENT_DATE()) AND WEEK(CURRENT_DATE()) + 1',
          'Game.league_id' => array(4, 5, 6),
          );
       $order = array('Game.league_id', 'Game.game_time');
-      $this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', array('Schedule' => array('Umpire' => 'Request')));
+//      $this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', array('Schedule' => array('Umpire' => 'Request')));
+      $this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', 'Schedule');
       $games = $this->Game->find('all', compact('conditions', 'order'));
       return $games;
       if (isset($this->params['requested'])) 
@@ -224,7 +226,7 @@ class GamesController extends AppController
       {
          return $games;
       } 
-      $this->set(compact('requests', 'games', 'schedules', 'umpires'));
+      $this->set(compact('requests', 'games', 'schedules', 'umpires', 'week'));
    }
    
    /**
