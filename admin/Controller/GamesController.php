@@ -256,6 +256,14 @@ class GamesController extends AppController {
                   {
                      $home = trim($split[0]);
                      $away = trim($split[1]);
+                     
+                     $type = strpos($away, ' ');
+                     $game_type = null;
+                     if ($type !== false)
+                     {
+                        $game_type = trim(substr($away, $type));
+                        $away = substr($away, 0, $type);
+                     }
 
                      if (strpos($home, 'RBR') !== false or strpos($away, 'RBR') !== false)
                      {
@@ -275,6 +283,7 @@ class GamesController extends AppController {
          					'league_id' => $league,
          					'home_team' => $home,
          					'away_team' => $away,
+         					'game_type' => $game_type,
          					'field_id' => $this->_field($league, is_null($new_field) ? $field : $new_field),
          					'game_time' => $my_time,
          				);
