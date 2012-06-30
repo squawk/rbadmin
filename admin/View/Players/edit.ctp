@@ -7,8 +7,8 @@
  		<?php if (!empty($this->data['Player']['txn_id'])): ?><p><strong style="color:blue">Paid with Paypal: txn_id=<?php echo $this->data['Player']['txn_id'] ?></strong></p><?php endif; ?>
 	<?php
 		echo $this->Form->input('id');
-		//echo $this->Form->input('allstar_tryout');
-		//echo $this->Form->submit('Submit');
+		echo $this->Form->input('allstar_tryout');
+		echo $this->Form->submit('Submit');
 		echo $this->Form->input('first_name');
 		echo $this->Form->input('last_name');
 		echo $this->Form->input('birthdate', array('label' => 'Birthdate (e.g. 3/4/97)', 'type' => 'text'));

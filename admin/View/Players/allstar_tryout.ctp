@@ -32,7 +32,7 @@ download the report as a PDF Document or Excel Spreadsheet.</p>
       	<?php echo $this->Html->link(__('Edit', true), array('action'=>'edit', $p['Player']['id'])); ?>
       </td>
       <td><?php echo $p['Player']['allstar_tryout_number']; ?> </td>
-      <td><?php echo $p['Player']['name']; ?></td>
+      <td><?php echo $p['Player']['name']; ?><br><?php echo $p['Team']['name'] ?></td>
       <td><?php echo $p['Player']['age'], '<br/>', $p['Player']['dob']; ?> </td>
       <td><?php echo nl2br($p['Player']['phone']); ?> </td>
       <td><?php echo $p['Player']['last_team']; ?></td>
@@ -43,13 +43,13 @@ download the report as a PDF Document or Excel Spreadsheet.</p>
 </div>
 <?php else: ?>
 <div class="players form">
-<?php echo $form->create('Player', array('action'=> 'allstar_tryout'));?>
+<?php echo $this->Form->create('Player', array('action'=> 'allstar_tryout'));?>
 	<fieldset>
  		<legend>All Star Tryout List -- Please select list</legend> 
 	<?php
-		echo $form->input('league_id');
+		echo $this->Form->input('league_id');
 	?>
 	</fieldset>
-<?php echo $form->end('Submit');?>
+<?php echo $this->Form->end('Submit');?>
 </div>
 <?php endif; ?> 

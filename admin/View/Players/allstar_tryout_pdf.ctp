@@ -12,7 +12,8 @@ else
 }
 
 // Use to pass to functions
-$GLOBALS['pdfObj'] = $this->loaded['pdf'];
+$GLOBALS['pdfObj'] = $this->Pdf->pdf;
+$pdf = $this->Pdf->pdf;
 
 $pdf->SetHeader('myHeader');
 $pdf->SetFooter('myFooter');
@@ -25,7 +26,7 @@ foreach ($players as $p)
 {
    $line = '';
    $line[] = $tryoutNumber++;
-   $line[] = strtoupper($p['Player']['last_name']) . "\n" . $p['Player']['first_name'];
+   $line[] = strtoupper($p['Player']['last_name']) . "\n" . ucwords(strtolower($p['Player']['first_name'])) . "\n" . '(' . $p['Team']['name'] . ')';
    $line[] = $p['Player']['age'] . "\n" . $p['Player']['dob'];
    $line[] = str_replace("\r", "\n", $p['Player']['phone']);
    $line[] = '';
@@ -48,7 +49,7 @@ for ($i = 0; $i < 20; $i++)
    $pdf->Row($line);
 }
 
-echo $pdf->pdfOutput();
+echo $this->Pdf->pdf->Output();
 
 function myHeader()
 {

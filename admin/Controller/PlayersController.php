@@ -301,7 +301,7 @@ class PlayersController extends AppController {
       if ($type == 'csv')
       {
          // CSV file
-         $this->set('title_for_layout', 'AllstarTryoutList.csv');
+         $this->set('title_for_layout', 'AllstarTryoutList');
          $this->layout = 'csv';
          $this->render('allstar_tryout_csv');
       }
