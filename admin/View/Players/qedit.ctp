@@ -8,7 +8,6 @@
 		echo $this->Form->input('first_name');
 		echo $this->Form->input('last_name');
 		echo $this->Form->input('birthdate', array('label' => 'Birthdate (e.g. 3/4/97)', 'type' => 'text'));
-		echo $this->Form->input('school_boundary');
       echo $this->Form->input('jersey_name');
       echo $this->Form->input('shirt_size', array('options' => $shirts));
       echo $this->Form->input('pant_size', array('options' => $pants));

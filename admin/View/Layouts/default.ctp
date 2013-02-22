@@ -30,16 +30,16 @@ $cakeDescription = __d('cake_dev', 'Riverton Baseball Administration');
 		echo $this->Html->meta('icon');
 		echo $this->Html->css('cake.generic');
 		echo $this->Html->css('http://fonts.googleapis.com/css?family=Imprima');
-		echo $this->Html->css('http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/pepper-grinder/jquery-ui.css');
+		echo $this->Html->css('http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/themes/pepper-grinder/jquery-ui.css');
 	?>
 	<script type="text/javascript">
 	var home_url = '<?php echo $this->webroot ?>';
 	</script>
-	
+
 	<!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	
+
 </head>
 <body>
 	<div id="container">
@@ -47,13 +47,13 @@ $cakeDescription = __d('cake_dev', 'Riverton Baseball Administration');
 			<h1><?php echo $this->Html->link($cakeDescription, '/'); ?>
 			<?php if (isset($username)) echo '- Welcome, ', $username, ' ', $this->Html->link('[Logout]', array('controller' => 'users', 'action' => 'logout')); ?></h1>
 		</header>
-		
+
 		<div id="content" role="main">
 
 			<?php echo $this->Session->flash(); echo $this->Session->flash('auth'); ?>
 
 			<?php echo $content_for_layout; ?>
-			
+
 			<?php if (isset($user_id) and !isset($draft)): ?>
 			<div class="actions">
 			<h3>Menu</h3>
@@ -61,7 +61,7 @@ $cakeDescription = __d('cake_dev', 'Riverton Baseball Administration');
 				<li><?php echo $this->Html->link('New Player', array('controller' => 'players', 'action' => 'add'));?></li>
 				<li><?php echo $this->Html->link('List Players', array('controller' => 'players', 'action' => 'index'));?></li>
 				<li><?php echo $this->Html->link('Team Rosters', array('controller' => 'players', 'action' => 'rosters'));?></li>
-				<li><?php echo $this->Html->link('List Teams', array('controller' => 'teams', 'action' => 'index'));?></li>				
+				<li><?php echo $this->Html->link('List Teams', array('controller' => 'teams', 'action' => 'index'));?></li>
 				<li><?php echo $this->Html->link('Tryout List', array('controller' => 'players', 'action' => 'tryout'));?></li>
 				<li><?php echo $this->Html->link('Allstar Tryout List', array('controller' => 'players', 'action' => 'allstar_tryout'));?></li>
 				<?php if ($user_id == 1): ?>
@@ -76,7 +76,7 @@ $cakeDescription = __d('cake_dev', 'Riverton Baseball Administration');
 			</ul>
 			</div>
 			<?php endif; ?>
-			
+
 
 		</div>
 		<div id="footer">
@@ -90,7 +90,7 @@ $cakeDescription = __d('cake_dev', 'Riverton Baseball Administration');
 	</div>
 	<?php echo $this->element('sql_dump'); ?>
 	<?php
-	   echo $this->Html->script(array('http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js', 'scripts'));
+	   echo $this->Html->script(array('http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.2/jquery-ui.min.js', 'scripts'));
 	   echo $scripts_for_layout;
 	   echo $this->Js->writeBuffer(array('cache' => true));
 	?>

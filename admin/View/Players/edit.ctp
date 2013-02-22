@@ -7,8 +7,8 @@
  		<?php if (!empty($this->data['Player']['txn_id'])): ?><p><strong style="color:blue">Paid with Paypal: txn_id=<?php echo $this->data['Player']['txn_id'] ?></strong></p><?php endif; ?>
 	<?php
 		echo $this->Form->input('id');
-		echo $this->Form->input('allstar_tryout');
-		echo $this->Form->submit('Submit');
+		//echo $this->Form->input('allstar_tryout');
+		//echo $this->Form->submit('Submit');
 		echo $this->Form->input('first_name');
 		echo $this->Form->input('last_name');
 		echo $this->Form->input('birthdate', array('label' => 'Birthdate (e.g. 3/4/97)', 'type' => 'text'));
@@ -21,10 +21,9 @@
 		echo $this->Form->input('evening_phone', array('label' => 'Evening Phone (e.g. 801-555-1212)'));
 		echo $this->Form->input('cell_phone', array('label' => 'Cell Phone (e.g. 801-555-1212)'));
 		echo $this->Form->input('email');
-		echo $this->Form->input('school_boundary');
       echo $this->Form->input('jersey_name');
       echo $this->Form->input('shirt_size', array('options' => $shirts));
-      echo $this->Form->input('pant_size', array('options' => $pants));
+		echo $this->Form->input('pant_size', array('options' => $pants, 'empty' => '- Select Size -'));
 		echo $this->Form->input('league_id', array('empty' => '- Select League -'));
    	echo $this->Form->input('team_id', array('empty' => 'Tryout or Not Assigned'));
    	echo $this->Form->input('last_team');

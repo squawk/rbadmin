@@ -23,10 +23,9 @@
 		echo $this->Form->input('evening_phone', array('label' => 'Evening Phone (e.g. 801-555-1212)'));
 		echo $this->Form->input('cell_phone', array('label' => 'Cell Phone (e.g. 801-555-1212)'));
 		echo $this->Form->input('email');
-		echo $this->Form->input('school_boundary');
 		echo $this->Form->input('jersey_name');
 		echo $this->Form->input('shirt_size', array('options' => $shirts));
-		echo $this->Form->input('pant_size', array('options' => $pants));
+		echo $this->Form->input('pant_size', array('options' => $pants, 'empty' => '- Select Size -'));
 		echo $this->Form->input('league_id', array('empty' => '- Select League -'));
 		echo $this->Form->input('team_id', array('empty' => 'Tryout or Not Assigned'));
 	?>

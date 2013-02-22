@@ -22,7 +22,7 @@ class PlayersController extends AppController {
          );
 		}
 		if ($league_id)
-		{		
+		{
 			$conditions[] = array(
 				'Player.league_id' => $league_id,
 			);
@@ -39,17 +39,17 @@ class PlayersController extends AppController {
          $this->render('/Elements/player_table');
          return;
       }
-	
+
 	}
 
    /**
     * A read-only view of a player
     * @param $id
     */
-	function view($id = null) 
+	function view($id = null)
 	{
 		$this->Player->id = $id;
-		if (!$this->Player->exists()) 
+		if (!$this->Player->exists())
 		{
 			throw new NotFoundException(__('Invalid player'));
 		}
@@ -59,35 +59,35 @@ class PlayersController extends AppController {
    /**
     * Add a new player
     */
-	function add() 
+	function add()
 	{
-	   if ($this->request->is('post')) 
+	   if ($this->request->is('post'))
 		{
 			$this->Player->create();
-			if ($this->Player->save($this->request->data)) 
+			if ($this->Player->save($this->request->data))
 			{
 				$this->Session->setFlash(__('%s %s has been saved', $this->request->data['Player']['first_name'], $this->request->data['Player']['last_name']));
 				$this->redirect(array('action' => 'index'));
-			} 
-			else 
+			}
+			else
 			{
 				$this->Session->setFlash(__('The player could not be saved. Please, try again.'));
 			}
 		}
-		
+
 	   // Default city to riverton
-	   $this->request->data['Player']['city'] = 'Riverton';
-	   $this->request->data['Player']['zip'] = '84065';
+	   //$this->request->data['Player']['city'] = 'Riverton';
+	   //$this->request->data['Player']['zip'] = '84065';
 	   $this->request->data['Player']['league_id'] = $this->Auth->user('default_league_id');
-	   
+
 	   $leagues = $this->Player->League->find('list');
-                $teams = array();
-                if (isset($this->request->data['Player']['team_id']) or isset($this->request->data['Player']['league_id']))
-                {
-                   $conditions = array('Team.league_id' => $this->request->data['Player']['league_id']);
-                   $teams = $this->Player->Team->find('list', compact('conditions'));
-                }
-                $this->set(compact('leagues', 'teams'));
+	   $teams = array();
+	   if (isset($this->request->data['Player']['team_id']) or isset($this->request->data['Player']['league_id']))
+	   {
+		   $conditions = array('Team.league_id' => $this->request->data['Player']['league_id']);
+		   $teams = $this->Player->Team->find('list', compact('conditions'));
+		}
+		$this->set(compact('leagues', 'teams'));
 	}
 
    function qedit($id = null)
@@ -95,32 +95,32 @@ class PlayersController extends AppController {
       $this->edit($id);
       $this->layout = 'ajax';
    }
-   
+
    /**
     * Edit a player
     * @param $id
     */
-	function edit($id = null) 
+	function edit($id = null)
 	{
 	   $this->Player->id = $id;
-	   if (!$this->Player->exists()) 
+	   if (!$this->Player->exists())
 		{
 			throw new NotFoundException(__('Invalid player'));
 		}
-		if ($this->request->is('post') or $this->request->is('put')) 
+		if ($this->request->is('post') or $this->request->is('put'))
 		{
-			if ($this->Player->save($this->request->data)) 
+			if ($this->Player->save($this->request->data))
 			{
 				$this->Session->setFlash(__('%s %s has been saved', $this->request->data['Player']['first_name'], $this->request->data['Player']['last_name']));
 				$this->redirect(array('action' => 'index'));
-			} 
-			else 
+			}
+			else
 			{
 			   $this->Session->setFlash(__('The player could not be saved. Please, try again.'));
 			   $this->request->data['Player']['birthdate'] = date('n/j/Y', strtotime($this->data['Player']['birthdate']));
 			}
-		} 
-		else 
+		}
+		else
 		{
 			$this->request->data = $this->Player->read(null, $id);
 			$this->request->data['Player']['birthdate'] = date('n/j/Y', strtotime($this->request->data['Player']['birthdate']));
@@ -132,24 +132,24 @@ class PlayersController extends AppController {
 		   $conditions = array('Team.league_id' => $this->request->data['Player']['league_id']);
 		   $teams = $this->Player->Team->find('list', compact('conditions'));
 		}
-		$this->set(compact('leagues', 'teams'));		
+		$this->set(compact('leagues', 'teams'));
 	}
 
    /**
     * Delete a player
     */
-   public function delete($id = null) 
+   public function delete($id = null)
  	{
- 		if (!$this->request->is('post')) 
+ 		if (!$this->request->is('post'))
  		{
  			throw new MethodNotAllowedException();
  		}
  		$this->Player->id = $id;
- 		if (!$this->Player->exists()) 
+ 		if (!$this->Player->exists())
  		{
  			throw new NotFoundException(__('Invalid player'));
  		}
- 		if ($this->Player->delete()) 
+ 		if ($this->Player->delete())
  		{
  			$this->Session->setFlash(__('Player deleted'));
  			$this->redirect(array('action' => 'index'));
@@ -157,7 +157,7 @@ class PlayersController extends AppController {
  		$this->Session->setFlash(__('Player was not deleted'));
  		$this->redirect(array('action' => 'index'));
  	}
-	
+
 	/**
 	 * Ajax look up of last year's players.
 	 */
@@ -167,9 +167,9 @@ class PlayersController extends AppController {
       {
          $this->layout = 'ajax';
       }
-      
+
       $name = explode(' ', $this->request->query['q']);
-      
+
       $fields = array(
          'LastYearPlayer.first_name',
          'LastYearPlayer.last_name',
@@ -202,11 +202,11 @@ class PlayersController extends AppController {
 		{
 			$limit = $this->request->query['limit'];
 		}
-		
+
 		$this->loadModel('LastYearPlayer');
 		$this->set('players', $this->LastYearPlayer->find('all', compact('fields', 'conditions', 'order', 'limit')));
 	}
-	
+
 	/**
 	 * List of players for tryout
 	 */
@@ -261,10 +261,10 @@ class PlayersController extends AppController {
          $this->loadModel('League');
    	   $this->set('leagues', $this->League->find('list'));
       }
-      
+
 	}
-	
-	
+
+
 	/**
 	 * List of players for tryout
 	 */
@@ -317,9 +317,9 @@ class PlayersController extends AppController {
          $this->loadModel('League');
    	   $this->set('leagues', $this->League->find('list'));
       }
-      
+
 	}
-	
+
 	/**
 	 * Roster list
 	 */
@@ -341,12 +341,19 @@ class PlayersController extends AppController {
          $allPlayers = $this->Player->find('all', compact('conditions', 'order'));
          foreach ($allPlayers as $p)
          {
-            $players[$p['Team']['name']][] = $p;
+         	if (empty($p['Team']['name']))
+         	{
+	            $players[''][] = $p;
+         	}
+         	else
+         	{
+	         	$players[sprintf('%s (%s)', $p['Team']['name'], $p['Team']['coach'])][] = $p;
+         	}
          }
          $this->set('players', $players);
          $this->set('league', $this->Player->League->findById($league_id));
       }
-      
+
       if ($type == 'pdf')
       {
          // PDF file
@@ -359,7 +366,7 @@ class PlayersController extends AppController {
          // PDF file
          $this->set('title_for_layout', 'LastnameList.txt');
          $this->layout = 'txt';
-         $this->render('roster_txt');         
+         $this->render('roster_txt');
       }
       else
       {
@@ -367,14 +374,14 @@ class PlayersController extends AppController {
    	   $this->set('leagues', $this->League->find('list'));
       }
    }
-   
+
    public function export()
    {
       $order = array('Player.league_id', 'Player.team_id', 'Player.last_name');
       $players = $this->Player->find('all', compact('conditions', 'order'));
       $this->set('players', $players);
    }
-   
+
    /**
     * Main draft page.
     *
@@ -396,14 +403,14 @@ class PlayersController extends AppController {
          $this->Player->contain();
          $players = $this->Player->find('all', compact('conditions', 'order'));
          $teams = $this->Player->Team->find('list', array('conditions' => array('league_id' => $league_id)));
-         
+
          // Picked players
          $this->Player->contain('Team');
          $conditions = array('Player.league_id' => $league_id, 'Player.team_id IS NOT NULL', 'Team.name is NOT NULL');
          $fields = array('Team.name', 'COUNT(*) count');
          $group = array('Team.name');
          $team_status = $this->Player->find('all', compact('fields', 'conditions', 'group'));
-         
+
          $this->set(compact('players', 'teams', 'team_status', 'league_id'));
       }
       $leagues = $this->Player->League->find('list', array('conditions' => array('id > 3')));
@@ -435,7 +442,7 @@ class PlayersController extends AppController {
       $team_status = $this->Player->find('all', compact('fields', 'conditions', 'group'));
       $this->set(compact('team_status', 'league_id'));
    }
-   
+
    /**
     * Handles the ajax call to undo a selected player from the draft.
     */
@@ -458,7 +465,7 @@ class PlayersController extends AppController {
       $team_status = $this->Player->find('all', compact('fields', 'conditions', 'group'));
       $this->set(compact('team_status', 'league_id'));
    }
-   
+
    /**
     * List the current players for a team
     *
@@ -497,7 +504,7 @@ class PlayersController extends AppController {
          }
       }
    }
-   
+
    public function validate_field()
    {
       $this->layout = 'ajax';
@@ -516,7 +523,7 @@ class PlayersController extends AppController {
          }
       }
    }
-   
+
    public function clothing()
    {
       /*
@@ -539,7 +546,6 @@ class PlayersController extends AppController {
       	'AXXL' => 'Adult XX-Large',
       );
       $pants = array(
-      	'O' => 'Only for PeeWees, Minors or Majors',
       	'YXS' => 'Youth X-Small',
       	'YS' => 'Youth Small',
       	'YM' => 'Youth Medium',
@@ -552,7 +558,7 @@ class PlayersController extends AppController {
       );
       return compact('shirts', 'pants');
    }
-   
+
    /**
     * Returns a list of teams for a league
     *
@@ -581,7 +587,7 @@ class PlayersController extends AppController {
 		"Rockies" => "Rockies - Jeremy Potter",
 		"Tigers" => "Tigers - Mitch Curtis",
 		"Twins" => "Twins - Mark Phister",
-		"Yankees" => "Yankees - Don Mortensen",         
+		"Yankees" => "Yankees - Don Mortensen",
 		),
          // Minor
          // Angels, Reds, Twins, Giants, Indians, Pirates
@@ -634,7 +640,7 @@ class PlayersController extends AppController {
          // PeeWee
          4=> array(
             "Rockies"=> "1. Rockies - Jeremy Potter",
-            "Marlins"=> "2. Marlins - Terry McBride",            
+            "Marlins"=> "2. Marlins - Terry McBride",
             "Pirates"=> "3. Pirates - Mike Okerlund",
             "Twins"=> "4. Twins - Kyle Nelson",
             "Yankees"=> "5. Yankees - Don Mortensen",
@@ -663,7 +669,7 @@ class PlayersController extends AppController {
             'Pirates' => '5. Pirates - Shawn Vernon',
             'D-Backs' => '6. D-Backs - Denny Barlow',
             'Royals' => '7. Royals - Ken Hart',
-            'Yankees' => '8. Yankees - Mark Graham',            
+            'Yankees' => '8. Yankees - Mark Graham',
             'Angels' => '9. Angels - Ed Day',
             'Indians' => '10. Indians - Shawn Bergon',
             'Reds' => '11. Reds - Gary Young',
@@ -674,7 +680,7 @@ class PlayersController extends AppController {
             "White Sox"=> "1. White Sox - Jim Garn",
             "Cardinals"=> "2. Cardinals - Kyle Price",
             "Phillies"=> "3. Phillies - Chris King",
-            "Giants"=> "4. Giants - Todd Nelson",            
+            "Giants"=> "4. Giants - Todd Nelson",
             "Yankees"=> "5. Yankees - Dennis Pennington",
             "Orioles"=> "6. Orioles - Nick Trujillo",
             "Reds"=> "7. Reds - Jason Lee",
@@ -705,12 +711,12 @@ class PlayersController extends AppController {
          //ksort($teams[$league_id]);
          return $teams[$league_id];
       }
-      
+
       $teams = $this->Player->query("SELECT Player.last_team FROM players Player WHERE Player.league_id='$league_id' AND last_team<>'' ORDER BY last_team");
       $set = Set::extract($teams, '{n}.Player.last_team');
       return array_combine($set, $set);
    }
-   
+
 }
 
 ?>

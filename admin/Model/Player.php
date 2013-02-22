@@ -73,6 +73,7 @@ class Player extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		/*
 		'moms_name' => array(
 			'notempty' => array(
 				'rule' => array('notempty'),
@@ -93,6 +94,7 @@ class Player extends AppModel {
 				//'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
+		*/
 		'email' => array(
 			'email' => array(
 				'rule' => array('email'),
@@ -262,19 +264,19 @@ class Player extends AppModel {
          $months_difference--;
          $datediff = $months_difference;
          break;
-     
+
          case 'y': // Difference between day numbers
-     
+
          $datediff = date("z", $dateto) - date("z", $datefrom);
          break;
-     
+
          case "d": // Number of full days
-     
+
          $datediff = floor($difference / 86400);
          break;
-     
+
          case "w": // Number of full weekdays
-     
+
          $days_difference = floor($difference / 86400);
          $weeks_difference = floor($days_difference / 7); // Complete weeks
          $first_day = date("w", $datefrom);
@@ -288,28 +290,28 @@ class Player extends AppModel {
          }
          $datediff = ($weeks_difference * 5) + $days_remainder;
          break;
-     
+
          case "ww": // Number of full weeks
-     
+
          $datediff = floor($difference / 604800);
          break;
-     
+
          case "h": // Number of full hours
-     
+
          $datediff = floor($difference / 3600);
          break;
-     
+
          case "n": // Number of full minutes
-     
+
          $datediff = floor($difference / 60);
          break;
-     
+
          default: // Number of full seconds (default)
-     
+
          $datediff = $difference;
          break;
       }
-     
+
       return $datediff;
 
    }
