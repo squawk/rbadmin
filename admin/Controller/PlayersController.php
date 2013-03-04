@@ -224,7 +224,7 @@ class PlayersController extends AppController {
       if ($league_id > 0)
       {
          //$conditions = array('Player.league_id'=> $league_id, 'Player.tryout'=> 1);
-         $conditions = array('Player.league_id' => $league_id, 'Player.team_id IS NULL');
+         $conditions = array('Player.league_id' => $league_id, 'OR' => array("Player.team_id = ''", 'Player.team_id IS NULL'));
          $order = array('last_name ASC', 'first_name ASC');
          $players = $this->Player->find('all', compact('conditions', 'order'));
          if ($type == 'number')
@@ -398,7 +398,8 @@ class PlayersController extends AppController {
       if ($league_id > 0)
       {
       	// Draft players
-         $conditions = array('Player.league_id'=> $league_id, 'Player.team_id IS NULL', 'Player.picked'=> 0);
+         //$conditions = array('Player.league_id'=> $league_id, 'Player.team_id IS NULL', 'Player.picked'=> 0);
+         $conditions = array('Player.league_id' => $league_id, 'OR' => array("Player.team_id = ''", 'Player.team_id IS NULL'), 'Player.picked'=> 0);
          $order = array('tryout_number', 'last_name', 'first_name');
          $this->Player->contain();
          $players = $this->Player->find('all', compact('conditions', 'order'));
