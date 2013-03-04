@@ -4,14 +4,14 @@
  *
  * PHP 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.TestSuite
  * @since         CakePHP(tm) v 2.0
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -23,6 +23,7 @@ App::uses('Router', 'Routing');
 App::uses('CakeRequest', 'Network');
 App::uses('CakeResponse', 'Network');
 App::uses('Helper', 'View');
+App::uses('CakeEvent', 'Event');
 
 /**
  * ControllerTestDispatcher class
@@ -57,14 +58,14 @@ class ControllerTestDispatcher extends Dispatcher {
 		$this->testController->helpers = array_merge(array('InterceptContent'), $this->testController->helpers);
 		$this->testController->setRequest($request);
 		$this->testController->response = $this->response;
-		foreach ($this->testController->Components->attached() as $component) {
+		foreach ($this->testController->Components->loaded() as $component) {
 			$object = $this->testController->Components->{$component};
 			if (isset($object->response)) {
 				$object->response = $response;
 			}
-		}
-		if (isset($object->request)) {
-			$object->request = $request;
+			if (isset($object->request)) {
+				$object->request = $request;
+			}
 		}
 		return $this->testController;
 	}
@@ -80,6 +81,7 @@ class ControllerTestDispatcher extends Dispatcher {
 			Router::reload();
 		}
 	}
+
 }
 
 /**
@@ -98,6 +100,7 @@ class InterceptContentHelper extends Helper {
 		$this->_View->assign('__view_no_layout__', $this->_View->fetch('content'));
 		$this->_View->Helpers->unload('InterceptContent');
 	}
+
 }
 
 /**
@@ -170,7 +173,7 @@ abstract class ControllerTestCase extends CakeTestCase {
  *
  * @var boolean
  */
-	private $__dirtyController = false;
+	protected $_dirtyController = false;
 
 /**
  * Used to enable calling ControllerTestCase::testAction() without the testing
@@ -178,12 +181,14 @@ abstract class ControllerTestCase extends CakeTestCase {
  *
  * @param string $name The name of the function
  * @param array $arguments Array of arguments
- * @return Function
+ * @return the return of _testAction
+ * @throws BadMethodCallException when you call methods that don't exist.
  */
 	public function __call($name, $arguments) {
 		if ($name == 'testAction') {
 			return call_user_func_array(array($this, '_testAction'), $arguments);
 		}
+		throw new BadMethodCallException("Method '{$name}' does not exist.");
 	}
 
 /**
@@ -191,20 +196,21 @@ abstract class ControllerTestCase extends CakeTestCase {
  *
  * ### Options:
  *
- * - `data` Will be used as the request data.  If the `method` is GET,
- *   data will be used a GET params.  If the `method` is POST, it will be used
+ * - `data` Will be used as the request data. If the `method` is GET,
+ *   data will be used a GET params. If the `method` is POST, it will be used
  *   as POST data. By setting `$options['data']` to a string, you can simulate XML or JSON
  *   payloads to your controllers allowing you to test REST webservices.
  * - `method` POST or GET. Defaults to POST.
- * - `return` Specify the return type you want.  Choose from:
+ * - `return` Specify the return type you want. Choose from:
  *     - `vars` Get the set view variables.
  *     - `view` Get the rendered view, without a layout.
  *     - `contents` Get the rendered view including the layout.
- *     - `result` Get the return value of the controller action.  Useful
+ *     - `result` Get the return value of the controller action. Useful
  *       for testing requestAction methods.
  *
  * @param string $url The url to test
  * @param array $options See options
+ * @return mixed
  */
 	protected function _testAction($url = '', $options = array()) {
 		$this->vars = $this->result = $this->view = $this->contents = $this->headers = null;
@@ -214,6 +220,8 @@ abstract class ControllerTestCase extends CakeTestCase {
 			'method' => 'POST',
 			'return' => 'result'
 		), $options);
+
+		$restore = array('get' => $_GET, 'post' => $_POST);
 
 		$_SERVER['REQUEST_METHOD'] = strtoupper($options['method']);
 		if (is_array($options['data'])) {
@@ -240,12 +248,12 @@ abstract class ControllerTestCase extends CakeTestCase {
 			}
 		}
 		$Dispatch->loadRoutes = $this->loadRoutes;
-		$request = $Dispatch->parseParams($request);
-		if (!isset($request->params['controller'])) {
+		$Dispatch->parseParams(new CakeEvent('ControllerTestCase', $Dispatch, array('request' => $request)));
+		if (!isset($request->params['controller']) && Router::currentRoute()) {
 			$this->headers = Router::currentRoute()->response->header();
 			return;
 		}
-		if ($this->__dirtyController) {
+		if ($this->_dirtyController) {
 			$this->controller = null;
 		}
 
@@ -268,8 +276,12 @@ abstract class ControllerTestCase extends CakeTestCase {
 		if (isset($this->controller->View)) {
 			$this->view = $this->controller->View->fetch('__view_no_layout__');
 		}
-		$this->__dirtyController = true;
+		$this->_dirtyController = true;
 		$this->headers = $Dispatch->response->header();
+
+		$_GET = $restore['get'];
+		$_POST = $restore['post'];
+
 		return $this->{$options['return']};
 	}
 
@@ -291,6 +303,8 @@ abstract class ControllerTestCase extends CakeTestCase {
  * @param string $controller Controller name
  * @param array $mocks List of classes and methods to mock
  * @return Controller Mocked controller
+ * @throws MissingControllerException When controllers could not be created.
+ * @throws MissingComponentException When components could not be created.
  */
 	public function generate($controller, $mocks = array()) {
 		list($plugin, $controller) = pluginSplit($controller);
@@ -299,7 +313,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 			$plugin .= '.';
 		}
 		App::uses($controller . 'Controller', $plugin . 'Controller');
-		if (!class_exists($controller.'Controller')) {
+		if (!class_exists($controller . 'Controller')) {
 			throw new MissingControllerException(array(
 				'class' => $controller . 'Controller',
 				'plugin' => substr($plugin, 0, -1)
@@ -314,7 +328,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 		), (array)$mocks);
 
 		list($plugin, $name) = pluginSplit($controller);
-		$_controller = $this->getMock($name.'Controller', $mocks['methods'], array(), '', false);
+		$_controller = $this->getMock($name . 'Controller', $mocks['methods'], array(), '', false);
 		$_controller->name = $name;
 		$request = $this->getMock('CakeRequest');
 		$response = $this->getMock('CakeResponse', array('_sendHeader'));
@@ -329,12 +343,7 @@ abstract class ControllerTestCase extends CakeTestCase {
 			if ($methods === true) {
 				$methods = array();
 			}
-			ClassRegistry::init($model);
-			list($plugin, $name) = pluginSplit($model);
-			$config = array_merge((array)$config, array('name' => $model));
-			$_model = $this->getMock($name, $methods, array($config));
-			ClassRegistry::removeObject($name);
-			ClassRegistry::addObject($name, $_model);
+			$this->getMockForModel($model, $methods, $config);
 		}
 
 		foreach ($mocks['components'] as $component => $methods) {
@@ -358,9 +367,10 @@ abstract class ControllerTestCase extends CakeTestCase {
 		}
 
 		$_controller->constructClasses();
-		$this->__dirtyController = false;
+		$this->_dirtyController = false;
 
 		$this->controller = $_controller;
 		return $this->controller;
 	}
+
 }

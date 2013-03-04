@@ -4,12 +4,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.Model
  * @since         CakePHP(tm) v 0.2.9
@@ -54,8 +54,9 @@ class AclNode extends Model {
 /**
  * Retrieves the Aro/Aco node for this model
  *
- * @param mixed $ref Array with 'model' and 'foreign_key', model object, or string value
+ * @param string|array|Model $ref Array with 'model' and 'foreign_key', model object, or string value
  * @return array Node found in database
+ * @throws CakeException when binding to a model that doesn't exist.
  */
 	public function node($ref = null) {
 		$db = $this->getDataSource();
@@ -123,7 +124,7 @@ class AclNode extends Model {
 			$ref = array('model' => $ref->name, 'foreign_key' => $ref->id);
 		} elseif (is_array($ref) && !(isset($ref['model']) && isset($ref['foreign_key']))) {
 			$name = key($ref);
-			list($plugin, $alias) = pluginSplit($name);
+			list(, $alias) = pluginSplit($name);
 
 			$model = ClassRegistry::init(array('class' => $name, 'alias' => $alias));
 
@@ -177,4 +178,5 @@ class AclNode extends Model {
 		}
 		return $result;
 	}
+
 }

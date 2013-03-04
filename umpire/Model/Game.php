@@ -1,5 +1,6 @@
 <?php
-class Game extends AppModel {
+class Game extends AppModel
+{
 	var $name = 'Game';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -21,20 +22,20 @@ class Game extends AppModel {
 			'fields' => '',
 			'order' => ''
 		),
-   	'TeamAway' => array(
-   		'className' => 'Team',
-   		'foreignKey' => 'away_team',
+		'TeamAway' => array(
+			'className' => 'Team',
+			'foreignKey' => 'away_team',
 			'conditions' => 'TeamAway.league_id = Game.league_id',
-   		'fields' => '',
-   		'order' => ''
-   	),
-   	'League' => array(
-   		'className' => 'League',
-   		'foreignKey' => 'league_id',
-   		'conditions' => '',
-   		'fields' => '',
-   		'order' => ''
-   	),
+			'fields' => '',
+			'order' => ''
+		),
+		'League' => array(
+			'className' => 'League',
+			'foreignKey' => 'league_id',
+			'conditions' => '',
+			'fields' => '',
+			'order' => ''
+		),
 		'Field' => array(
 			'className' => 'Field',
 			'foreignKey' => 'field_id',
@@ -45,4 +46,5 @@ class Game extends AppModel {
 	);
 
 }
+
 ?>

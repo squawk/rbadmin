@@ -3,12 +3,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
  */
@@ -16,7 +16,7 @@
 App::uses('BaseAuthorize', 'Controller/Component/Auth');
 
 /**
- * An authorization adapter for AuthComponent.  Provides the ability to authorize using a controller callback.
+ * An authorization adapter for AuthComponent. Provides the ability to authorize using a controller callback.
  * Your controller's isAuthorized() method should return a boolean to indicate whether or not the user is authorized.
  *
  * {{{
@@ -38,9 +38,9 @@ App::uses('BaseAuthorize', 'Controller/Component/Auth');
 class ControllerAuthorize extends BaseAuthorize {
 
 /**
- * Get/set the controller this authorize object will be working with.  Also checks that isAuthorized is implemented.
+ * Get/set the controller this authorize object will be working with. Also checks that isAuthorized is implemented.
  *
- * @param mixed $controller null to get, a controller to set.
+ * @param Controller $controller null to get, a controller to set.
  * @return mixed
  * @throws CakeException
  */

@@ -4,14 +4,14 @@
  *
  * PHP 5
  *
- * CakePHP(tm) Tests <http://book.cakephp.org/view/1196/Testing>
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * CakePHP(tm) Tests <http://book.cakephp.org/2.0/en/development/testing.html>
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://book.cakephp.org/view/1196/Testing CakePHP(tm) Tests
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @link          http://book.cakephp.org/2.0/en/development/testing.html CakePHP(tm) Tests
  * @package       Cake.TestSuite
  * @since         CakePHP(tm) v 1.2.0.4667
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -63,15 +63,15 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 	protected $_pathRestore = array();
 
 /**
-* Runs the test case and collects the results in a TestResult object.
-* If no TestResult object is passed a new one will be created.
-* This method is run for each test method in this class
-*
-* @param  PHPUnit_Framework_TestResult $result
-* @return PHPUnit_Framework_TestResult
-* @throws InvalidArgumentException
-*/
-	public function run(PHPUnit_Framework_TestResult $result = NULL) {
+ * Runs the test case and collects the results in a TestResult object.
+ * If no TestResult object is passed a new one will be created.
+ * This method is run for each test method in this class
+ *
+ * @param  PHPUnit_Framework_TestResult $result
+ * @return PHPUnit_Framework_TestResult
+ * @throws InvalidArgumentException
+ */
+	public function run(PHPUnit_Framework_TestResult $result = null) {
 		if (!empty($this->fixtureManager)) {
 			$this->fixtureManager->load($this);
 		}
@@ -146,16 +146,30 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 		if (class_exists('ClassRegistry', false)) {
 			ClassRegistry::flush();
 		}
-		Configure::write($this->_configure);
+		if (!empty($this->_configure)) {
+			Configure::clear();
+			Configure::write($this->_configure);
+		}
 		if (isset($_GET['debug']) && $_GET['debug']) {
 			ob_flush();
 		}
 	}
 
 /**
+ * See CakeTestSuiteDispatcher::date()
+ *
+ * @param string $format format to be used.
+ * @return string
+ */
+	public static function date($format = 'Y-m-d H:i:s') {
+		return CakeTestSuiteDispatcher::date($format);
+	}
+
+// @codingStandardsIgnoreStart PHPUnit overrides don't match CakePHP
+
+/**
  * Announces the start of a test.
  *
- * @param string $method Test method just started.
  * @return void
  */
 	protected function assertPreConditions() {
@@ -166,13 +180,14 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 /**
  * Announces the end of a test.
  *
- * @param string $method Test method just finished.
  * @return void
  */
 	protected function assertPostConditions() {
 		parent::assertPostConditions();
 		$this->endTest($this->getName());
 	}
+
+// @codingStandardsIgnoreEnd
 
 /**
  * Chooses which fixtures to load for a given test
@@ -181,6 +196,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
  *                        fixture, i.e. 'Post', 'Author', etc.
  * @return void
  * @see CakeTestCase::$autoFixtures
+ * @throws Exception when no fixture manager is available.
  */
 	public function loadFixtures() {
 		if (empty($this->fixtureManager)) {
@@ -230,7 +246,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
  * @param string $string
  * @param string $message
  * @return boolean
- */	
+ */
 	public function assertTextStartsWith($prefix, $string, $message = '') {
 		$prefix = str_replace(array("\r\n", "\r"), "\n", $prefix);
 		$string = str_replace(array("\r\n", "\r"), "\n", $string);
@@ -245,7 +261,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
  * @param string $string
  * @param string $message
  * @return boolean
- */	
+ */
 	public function assertTextStartsNotWith($prefix, $string, $message = '') {
 		$prefix = str_replace(array("\r\n", "\r"), "\n", $prefix);
 		$string = str_replace(array("\r\n", "\r"), "\n", $string);
@@ -260,7 +276,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
  * @param string $string
  * @param string $message
  * @return boolean
- */	
+ */
 	public function assertTextEndsWith($suffix, $string, $message = '') {
 		$suffix = str_replace(array("\r\n", "\r"), "\n", $suffix);
 		$string = str_replace(array("\r\n", "\r"), "\n", $string);
@@ -280,7 +296,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 		$suffix = str_replace(array("\r\n", "\r"), "\n", $suffix);
 		$string = str_replace(array("\r\n", "\r"), "\n", $string);
 		return $this->assertStringEndsNotWith($suffix, $string, $message);
-	}	
+	}
 
 /**
  * Assert that a string contains another string, ignoring differences in newlines.
@@ -350,7 +366,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 	public function assertTags($string, $expected, $fullDebug = false) {
 		$regex = array();
 		$normalized = array();
-		foreach ((array) $expected as $key => $val) {
+		foreach ((array)$expected as $key => $val) {
 			if (!is_numeric($key)) {
 				$normalized[] = array($key => $val);
 			} else {
@@ -376,7 +392,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 					}
 					$regex[] = array(
 						sprintf('%sClose %s tag', $prefix[0], substr($tags, strlen($match[0]))),
-						sprintf('%s<[\s]*\/[\s]*%s[\s]*>[\n\r]*', $prefix[1], substr($tags,  strlen($match[0]))),
+						sprintf('%s<[\s]*\/[\s]*%s[\s]*>[\n\r]*', $prefix[1], substr($tags, strlen($match[0]))),
 						$i,
 					);
 					continue;
@@ -431,7 +447,7 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 					$i++;
 				}
 				if ($attrs) {
-					$permutations = $this->_array_permute($attrs);
+					$permutations = $this->_arrayPermute($attrs);
 
 					$permutationTokens = array();
 					foreach ($permutations as $permutation) {
@@ -478,9 +494,10 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
  * Generates all permutation of an array $items and returns them in a new array.
  *
  * @param array $items An array of items
+ * @param array $perms
  * @return array
  */
-	protected function _array_permute($items, $perms = array()) {
+	protected function _arrayPermute($items, $perms = array()) {
 		static $permuted;
 		if (empty($perms)) {
 			$permuted = array();
@@ -495,14 +512,17 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 				$newPerms = $perms;
 				list($tmp) = array_splice($newItems, $i, 1);
 				array_unshift($newPerms, $tmp);
-				$this->_array_permute($newItems, $newPerms);
+				$this->_arrayPermute($newItems, $newPerms);
 			}
 			return $permuted;
 		}
 	}
 
+// @codingStandardsIgnoreStart
+
 /**
  * Compatibility wrapper function for assertEquals
+ *
  *
  * @param mixed $result
  * @param mixed $expected
@@ -573,6 +593,9 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 		return self::assertNotRegExp($pattern, $string, $message);
 	}
 
+/**
+ * assert no errors
+ */
 	protected function assertNoErrors() {
 	}
 
@@ -653,4 +676,28 @@ abstract class CakeTestCase extends PHPUnit_Framework_TestCase {
 		}
 		return $condition;
 	}
+	// @codingStandardsIgnoreEnd
+
+/**
+ * Mock a model, maintain fixtures and table association
+ *
+ * @param string $model
+ * @param mixed $methods
+ * @param mixed $config
+ * @return Model
+ */
+	public function getMockForModel($model, $methods = array(), $config = null) {
+		if (is_null($config)) {
+			$config = ClassRegistry::config('Model');
+		}
+
+		list($plugin, $name) = pluginSplit($model, true);
+		App::uses($name, $plugin . 'Model');
+		$config = array_merge((array)$config, array('name' => $name));
+		$mock = $this->getMock($name, $methods, array($config));
+		ClassRegistry::removeObject($name);
+		ClassRegistry::addObject($name, $mock);
+		return $mock;
+	}
+
 }

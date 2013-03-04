@@ -1,5 +1,6 @@
 <?php
-class LeagueUmpire extends AppModel {
+class LeagueUmpire extends AppModel
+{
 	var $name = 'LeagueUser';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -20,4 +21,5 @@ class LeagueUmpire extends AppModel {
 		)
 	);
 }
+
 ?>

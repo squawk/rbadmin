@@ -8,12 +8,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.View.Helper
  * @since         CakePHP(tm) v 1.3
@@ -229,15 +229,15 @@ class PrototypeEngineHelper extends JsBaseEngineHelper {
 /**
  * Create an Ajax or Ajax.Updater call.
  *
- * @param mixed $url
+ * @param string|array $url
  * @param array $options
  * @return string The completed ajax call.
  */
 	public function request($url, $options = array()) {
-		$url = '"' . $this->url($url) . '"';
+		$url = html_entity_decode($this->url($url), ENT_COMPAT, Configure::read('App.encoding'));
+		$url = '"' . $url . '"';
 		$options = $this->_mapOptions('request', $options);
 		$type = '.Request';
-		$data = null;
 		if (isset($options['type']) && strtolower($options['type']) == 'json') {
 			unset($options['type']);
 		}

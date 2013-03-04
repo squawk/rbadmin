@@ -5,12 +5,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.TestSuite
  * @since         CakePHP(tm) v 2.0
@@ -36,7 +36,9 @@ class CakeTestSuiteCommand extends PHPUnit_TextUI_Command {
 /**
  * Construct method
  *
+ * @param mixed $loader
  * @param array $params list of options to be used for this run
+ * @throws MissingTestLoaderException When a loader class could not be found.
  */
 	public function __construct($loader, $params = array()) {
 		if ($loader && !class_exists($loader)) {
@@ -72,7 +74,7 @@ class CakeTestSuiteCommand extends PHPUnit_TextUI_Command {
 			);
 		}
 
-		if (count($suite) == 0) {
+		if (!count($suite)) {
 			$skeleton = new PHPUnit_Util_Skeleton_Test(
 				$suite->getName(),
 				$this->arguments['testFile']
@@ -81,7 +83,9 @@ class CakeTestSuiteCommand extends PHPUnit_TextUI_Command {
 			$result = $skeleton->generate(true);
 
 			if (!$result['incomplete']) {
+				//@codingStandardsIgnoreStart
 				eval(str_replace(array('<?php', '?>'), '', $result['code']));
+				//@codingStandardsIgnoreEnd
 				$suite = new PHPUnit_Framework_TestSuite(
 					$this->arguments['test'] . 'Test'
 				);
@@ -117,9 +121,7 @@ class CakeTestSuiteCommand extends PHPUnit_TextUI_Command {
 				exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
 			} elseif (!isset($result) || $result->errorCount() > 0) {
 				exit(PHPUnit_TextUI_TestRunner::EXCEPTION_EXIT);
-			}
-
-			else {
+			} else {
 				exit(PHPUnit_TextUI_TestRunner::FAILURE_EXIT);
 			}
 		}
@@ -128,11 +130,11 @@ class CakeTestSuiteCommand extends PHPUnit_TextUI_Command {
 /**
  * Create a runner for the command.
  *
- * @param $loader The loader to be used for the test run.
+ * @param mixed $loader The loader to be used for the test run.
  * @return CakeTestRunner
  */
 	public function getRunner($loader) {
- 		return new CakeTestRunner($loader, $this->_params);
+		return new CakeTestRunner($loader, $this->_params);
 	}
 
 /**
@@ -148,12 +150,12 @@ class CakeTestSuiteCommand extends PHPUnit_TextUI_Command {
 /**
  * Handles output flag used to change printing on webrunner.
  *
+ * @param string $reporter
  * @return void
  */
 	public function handleReporter($reporter) {
 		$object = null;
 
-		$type = strtolower($reporter);
 		$reporter = ucwords($reporter);
 		$coreClass = 'Cake' . $reporter . 'Reporter';
 		App::uses($coreClass, 'TestSuite/Reporter');
@@ -168,4 +170,5 @@ class CakeTestSuiteCommand extends PHPUnit_TextUI_Command {
 		}
 		return $this->arguments['printer'] = $object;
 	}
+
 }

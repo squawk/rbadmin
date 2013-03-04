@@ -2262,3 +2262,45 @@
 2012-03-25 21:03:59 Error: [MissingControllerException] Controller class JsController could not be found.
 #0 /Users/bvanskyh/Development/rbadmin/umpire/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
 #1 {main}
+2013-02-21 19:00:04 Error: [MissingConnectionException] Database connection "SQLSTATE[HY000] [1049] Unknown database 'rbadmin'" is missing, or could not be created.
+#0 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Datasource/DboSource.php(244): Mysql->connect()
+#1 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/ConnectionManager.php(101): DboSource->__construct(Array)
+#2 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(3354): ConnectionManager::getDataSource('default')
+#3 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(1085): Model->setDataSource('default')
+#4 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(3380): Model->setSource('umpires')
+#5 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(1278): Model->getDataSource()
+#6 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/Helper/FormHelper.php(191): Model->schema()
+#7 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/Helper/FormHelper.php(444): FormHelper->_introspectModel('Umpire', 'fields')
+#8 /Users/bvanskyh/Sites/rbadmin/app/View/Umpires/login.ctp(1): FormHelper->create('Umpire')
+#9 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/View.php(908): include('/Users/bvanskyh...')
+#10 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/View.php(872): View->_evaluate('/Users/bvanskyh...', Array)
+#11 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/View.php(463): View->_render('/Users/bvanskyh...')
+#12 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Controller/Controller.php(962): View->render(NULL, NULL)
+#13 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Routing/Dispatcher.php(110): Controller->render()
+#14 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Routing/Dispatcher.php(85): Dispatcher->_invoke(Object(UmpiresController), Object(CakeRequest), Object(CakeResponse))
+#15 /Users/bvanskyh/Sites/rbadmin/app/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#16 {main}
+2013-02-21 19:00:04 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Sites/rbadmin/app/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}
+2013-02-21 19:00:19 Error: [MissingConnectionException] Database connection "SQLSTATE[HY000] [1049] Unknown database 'rbadmin'" is missing, or could not be created.
+#0 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Datasource/DboSource.php(244): Mysql->connect()
+#1 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/ConnectionManager.php(101): DboSource->__construct(Array)
+#2 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(3354): ConnectionManager::getDataSource('default')
+#3 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(1085): Model->setDataSource('default')
+#4 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(3380): Model->setSource('umpires')
+#5 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Model/Model.php(1278): Model->getDataSource()
+#6 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/Helper/FormHelper.php(191): Model->schema()
+#7 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/Helper/FormHelper.php(444): FormHelper->_introspectModel('Umpire', 'fields')
+#8 /Users/bvanskyh/Sites/rbadmin/app/View/Umpires/login.ctp(1): FormHelper->create('Umpire')
+#9 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/View.php(908): include('/Users/bvanskyh...')
+#10 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/View.php(872): View->_evaluate('/Users/bvanskyh...', Array)
+#11 /Users/bvanskyh/Sites/rbadmin/lib/Cake/View/View.php(463): View->_render('/Users/bvanskyh...')
+#12 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Controller/Controller.php(962): View->render(NULL, NULL)
+#13 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Routing/Dispatcher.php(110): Controller->render()
+#14 /Users/bvanskyh/Sites/rbadmin/lib/Cake/Routing/Dispatcher.php(85): Dispatcher->_invoke(Object(UmpiresController), Object(CakeRequest), Object(CakeResponse))
+#15 /Users/bvanskyh/Sites/rbadmin/app/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#16 {main}
+2013-02-21 19:00:19 Error: [MissingControllerException] Controller class JsController could not be found.
+#0 /Users/bvanskyh/Sites/rbadmin/app/webroot/index.php(96): Dispatcher->dispatch(Object(CakeRequest), Object(CakeResponse))
+#1 {main}

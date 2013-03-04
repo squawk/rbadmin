@@ -7,12 +7,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 2.0
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -43,6 +43,8 @@ class CakeTestLoader extends PHPUnit_Runner_StandardTestSuiteLoader {
 /**
  * Convert path fragments used by Cake's test runner to absolute paths that can be fed to PHPUnit.
  *
+ * @param string $filePath
+ * @param string $params
  * @return void
  */
 	protected function _resolveTestFile($filePath, $params) {
@@ -66,7 +68,8 @@ class CakeTestLoader extends PHPUnit_Runner_StandardTestSuiteLoader {
 				try {
 					CakePlugin::load($params['plugin']);
 					$result = CakePlugin::path($params['plugin']) . 'Test' . DS . 'Case';
-				} catch (MissingPluginException $e) {}
+				} catch (MissingPluginException $e) {
+				}
 			} else {
 				$result = CakePlugin::path($params['plugin']) . 'Test' . DS . 'Case';
 			}
@@ -79,7 +82,8 @@ class CakeTestLoader extends PHPUnit_Runner_StandardTestSuiteLoader {
 /**
  * Get the list of files for the test listing.
  *
- * @return void
+ * @param string $params
+ * @return array
  */
 	public static function generateTestList($params) {
 		$directory = self::_basePath($params);
@@ -100,7 +104,7 @@ class CakeTestLoader extends PHPUnit_Runner_StandardTestSuiteLoader {
  * a given fileTestFunction, like isTestCaseFile()
  *
  * @param string $directory The directory to scan for files.
- * @param mixed $fileTestFunction
+ * @return array
  */
 	protected static function _getRecursiveFileList($directory = '.') {
 		$fileList = array();

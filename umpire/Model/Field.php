@@ -1,5 +1,6 @@
 <?php
-class Field extends AppModel {
+class Field extends AppModel
+{
 	var $name = 'Field';
 	var $displayField = 'name';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -21,4 +22,5 @@ class Field extends AppModel {
 	);
 
 }
+
 ?>

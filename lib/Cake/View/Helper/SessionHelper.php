@@ -5,12 +5,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @package       Cake.View.Helper
  * @since         CakePHP(tm) v 1.1.7.3328
@@ -75,7 +75,7 @@ class SessionHelper extends AppHelper {
  * In your view: $this->Session->flash('somekey');
  * Will default to flash if no param is passed
  *
- * You can pass additional information into the flash message generation.  This allows you
+ * You can pass additional information into the flash message generation. This allows you
  * to consolidate all the parameters for a given type of flash message into the view.
  *
  * {{{
@@ -100,7 +100,7 @@ class SessionHelper extends AppHelper {
  * echo $this->Session->flash('flash', array('element' => 'my_custom_element'));
  * }}}
  *
- * If you want to use an element from a plugin for rendering your flash message you can do that using the 
+ * If you want to use an element from a plugin for rendering your flash message you can do that using the
  * plugin param:
  *
  * {{{
@@ -134,7 +134,7 @@ class SessionHelper extends AppHelper {
 					$class = $flash['params']['class'];
 				}
 				$out = '<div id="' . $key . 'Message" class="' . $class . '">' . $message . '</div>';
-			} elseif ($flash['element'] == '' || $flash['element'] == null) {
+			} elseif (!$flash['element']) {
 				$out = $message;
 			} else {
 				$options = array();

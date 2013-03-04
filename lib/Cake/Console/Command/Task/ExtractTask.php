@@ -5,12 +5,12 @@
  * PHP 5
  *
  * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  *
  * Licensed under The MIT License
  * Redistributions of files must retain the above copyright notice.
  *
- * @copyright     Copyright 2005-2011, Cake Software Foundation, Inc. (http://cakefoundation.org)
+ * @copyright     Copyright 2005-2012, Cake Software Foundation, Inc. (http://cakefoundation.org)
  * @link          http://cakephp.org CakePHP(tm) Project
  * @since         CakePHP(tm) v 1.2.0.5012
  * @license       MIT License (http://www.opensource.org/licenses/mit-license.php)
@@ -19,6 +19,7 @@
 App::uses('AppShell', 'Console/Command');
 App::uses('File', 'Utility');
 App::uses('Folder', 'Utility');
+App::uses('Hash', 'Utility');
 
 /**
  * Language string extractor
@@ -105,6 +106,46 @@ class ExtractTask extends AppShell {
 	protected $_validationDomain = 'default';
 
 /**
+ * Holds whether this call should extract the CakePHP Lib messages
+ *
+ * @var boolean
+ */
+	protected $_extractCore = false;
+
+/**
+ * Method to interact with the User and get path selections.
+ *
+ * @return void
+ */
+	protected function _getPaths() {
+		$defaultPath = APP;
+		while (true) {
+			$currentPaths = count($this->_paths) > 0 ? $this->_paths : array('None');
+			$message = __d(
+				'cake_console',
+				"Current paths: %s\nWhat is the path you would like to extract?\n[Q]uit [D]one",
+				implode(', ', $currentPaths)
+			);
+			$response = $this->in($message, null, $defaultPath);
+			if (strtoupper($response) === 'Q') {
+				$this->out(__d('cake_console', 'Extract Aborted'));
+				return $this->_stop();
+			} elseif (strtoupper($response) === 'D' && count($this->_paths)) {
+				$this->out();
+				return;
+			} elseif (strtoupper($response) === 'D') {
+				$this->err(__d('cake_console', '<warning>No directories selected.</warning> Please choose a directory.'));
+			} elseif (is_dir($response)) {
+				$this->_paths[] = $response;
+				$defaultPath = 'D';
+			} else {
+				$this->err(__d('cake_console', 'The directory path you supplied was not found. Please try again.'));
+			}
+			$this->out();
+		}
+	}
+
+/**
  * Execution method always used for tasks
  *
  * @return void
@@ -126,24 +167,22 @@ class ExtractTask extends AppShell {
 			$this->_paths = array(CakePlugin::path($plugin));
 			$this->params['plugin'] = $plugin;
 		} else {
-			$defaultPath = APP;
-			$message = __d('cake_console', "What is the path you would like to extract?\n[Q]uit [D]one");
-			while (true) {
-				$response = $this->in($message, null, $defaultPath);
-				if (strtoupper($response) === 'Q') {
-					$this->out(__d('cake_console', 'Extract Aborted'));
-					$this->_stop();
-				} elseif (strtoupper($response) === 'D') {
-					$this->out();
-					break;
-				} elseif (is_dir($response)) {
-					$this->_paths[] = $response;
-					$defaultPath = 'D';
-				} else {
-					$this->err(__d('cake_console', 'The directory path you supplied was not found. Please try again.'));
-				}
-				$this->out();
-			}
+			$this->_getPaths();
+		}
+
+		if (isset($this->params['extract-core'])) {
+			$this->_extractCore = !(strtolower($this->params['extract-core']) === 'no');
+		} else {
+			$response = $this->in(__d('cake_console', 'Would you like to extract the messages from the CakePHP core?'), array('y', 'n'), 'n');
+			$this->_extractCore = strtolower($response) === 'y';
+		}
+
+		if ($this->_extractCore) {
+			$this->_paths[] = CAKE;
+			$this->_exclude = array_merge($this->_exclude, array(
+				CAKE . 'Test',
+				CAKE . 'Console' . DS . 'Templates'
+			));
 		}
 
 		if (!empty($this->params['exclude-plugins']) && $this->_isExtractingApp()) {
@@ -206,7 +245,7 @@ class ExtractTask extends AppShell {
 		if (empty($this->_translations[$domain][$msgid])) {
 			$this->_translations[$domain][$msgid] = array(
 				'msgid_plural' => false
-			 );
+			);
 		}
 
 		if (isset($details['msgid_plural'])) {
@@ -286,6 +325,15 @@ class ExtractTask extends AppShell {
 			->addOption('exclude', array(
 				'help' => __d('cake_console', 'Comma separated list of directories to exclude.' .
 					' Any path containing a path segment with the provided values will be skipped. E.g. test,vendors')
+			))
+			->addOption('overwrite', array(
+				'boolean' => true,
+				'default' => false,
+				'help' => __d('cake_console', 'Always overwrite existing .pot files.')
+			))
+			->addOption('extract-core', array(
+				'help' => __d('cake_console', 'Extract messages from the CakePHP core libs.'),
+				'choices' => array('yes', 'no')
 			));
 	}
 
@@ -343,7 +391,7 @@ class ExtractTask extends AppShell {
 				$position = $count;
 				$depth = 0;
 
-				while ($depth == 0) {
+				while (!$depth) {
 					if ($this->_tokens[$position] == '(') {
 						$depth++;
 					} elseif ($this->_tokens[$position] == ')') {
@@ -431,8 +479,8 @@ class ExtractTask extends AppShell {
 			return;
 		}
 
-		$dims = Set::countDim($rules);
-		if ($dims == 1 || ($dims == 2 && isset($rules['message']))) {
+		$dims = Hash::dimensions($rules);
+		if ($dims === 1 || ($dims === 2 && isset($rules['message']))) {
 			$rules = array($rules);
 		}
 
@@ -463,6 +511,8 @@ class ExtractTask extends AppShell {
  * @return void
  */
 	protected function _buildFiles() {
+		$paths = $this->_paths;
+		$paths[] = realpath(APP) . DS;
 		foreach ($this->_translations as $domain => $translations) {
 			foreach ($translations as $msgid => $details) {
 				$plural = $details['msgid_plural'];
@@ -473,7 +523,7 @@ class ExtractTask extends AppShell {
 					$occurrences[] = $file . ':' . implode(';', $lines);
 				}
 				$occurrences = implode("\n#: ", $occurrences);
-				$header = '#: ' . str_replace($this->_paths, '', $occurrences) . "\n";
+				$header = '#: ' . str_replace(DS, '/', str_replace($paths, '', $occurrences)) . "\n";
 
 				if ($plural === false) {
 					$sentence = "msgid \"{$msgid}\"\n";
@@ -519,6 +569,10 @@ class ExtractTask extends AppShell {
  */
 	protected function _writeFiles() {
 		$overwriteAll = false;
+		if (!empty($this->params['overwrite'])) {
+			$overwriteAll = true;
+		}
+
 		foreach ($this->_storage as $domain => $sentences) {
 			$output = $this->_writeHeader();
 			foreach ($sentences as $sentence => $header) {
@@ -537,7 +591,7 @@ class ExtractTask extends AppShell {
 				);
 				if (strtoupper($response) === 'N') {
 					$response = '';
-					while ($response == '') {
+					while (!$response) {
 						$response = $this->in(__d('cake_console', "What would you like to name this file?"), null, 'new_' . $filename);
 						$File = new File($this->_output . $response);
 						$filename = $response;
@@ -557,7 +611,7 @@ class ExtractTask extends AppShell {
  * @return string Translation template header
  */
 	protected function _writeHeader() {
-		$output  = "# LANGUAGE translation of CakePHP Application\n";
+		$output = "# LANGUAGE translation of CakePHP Application\n";
 		$output .= "# Copyright YEAR NAME <EMAIL@ADDRESS>\n";
 		$output .= "#\n";
 		$output .= "#, fuzzy\n";

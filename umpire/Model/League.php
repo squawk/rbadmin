@@ -1,5 +1,6 @@
 <?php
-class League extends AppModel {
+class League extends AppModel
+{
 	var $name = 'League';
 	var $displayField = 'name';
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -47,4 +48,5 @@ class League extends AppModel {
 	);
 
 }
+
 ?>

@@ -31,33 +31,34 @@ App::uses('Controller', 'Controller');
  * @package       app.Controller
  * @link http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
-class AppController extends Controller {
+class AppController extends Controller
+{
 	public $helpers = array('Session', 'Html', 'Form', 'Time', 'Js');
-   public $components = array('Session', 'RequestHandler', 
-	    'Auth' => array(
-	        'loginAction' => array(
-	            'controller' => 'umpires',
-	            'action' => 'login',
-	        ),
-        'loginRedirect' => array(
-            'controller' => 'pages',
-            'action' => 'home',
-        ),
-	
-			  'authenticate' => array(	
-					'Form' => array('userModel' => 'Umpire'),
-			  ),
-	    )
+	public $components = array('Session', 'RequestHandler',
+		'Auth' => array(
+			'loginAction' => array(
+				'controller' => 'umpires',
+				'action' => 'login',
+			),
+			'loginRedirect' => array(
+				'controller' => 'pages',
+				'action' => 'home',
+			),
+
+			'authenticate' => array(
+				'Form' => array('userModel' => 'Umpire'),
+			),
+		)
 	);
-   
-   function beforeFilter()
-   {
-      if ($this->Auth->user('id'))
-      {
-         $this->set('user_id', $this->Auth->user('id'));
-         $this->set('username', $this->Auth->user('username'));
-         $this->set('login_name', $this->Auth->user('name'));
-      }
+
+	function beforeFilter()
+	{
+		if ($this->Auth->user('id'))
+		{
+			$this->set('user_id', $this->Auth->user('id'));
+			$this->set('username', $this->Auth->user('username'));
+			$this->set('login_name', $this->Auth->user('name'));
+		}
 	}
-	
+
 }
