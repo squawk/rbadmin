@@ -1,13 +1,12 @@
 <?php
 class Team extends AppModel
 {
-	var $name = 'Team';
-	var $displayField = 'name';
-	var $primaryKey = 'team_id';
+	public $displayField = 'name';
+	public $primaryKey = 'team_id';
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
-	var $belongsTo = array(
+	public $belongsTo = array(
 		'League' => array(
 			'className' => 'League',
 			'foreignKey' => 'league_id',
@@ -17,7 +16,7 @@ class Team extends AppModel
 		)
 	);
 
-	var $hasMany = array(
+	public $hasMany = array(
 		'GameHome' => array(
 			'className' => 'Game',
 			'foreignKey' => 'home_team',
@@ -45,7 +44,4 @@ class Team extends AppModel
 			'counterQuery' => ''
 		)
 	);
-
 }
-
-?>

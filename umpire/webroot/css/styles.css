@@ -1,0 +1,80 @@
+body { padding-top: 60px; }
+
+div.required label:after {
+  content: "*";
+  color: purple;
+  font-weight: bold;
+}
+
+/* Request Calendar */
+#calendar td {
+   border:1px solid #ddd;
+}
+#calendar tr.calendar-header td {
+   background-color: #660099;
+	color: #ffffff;
+	text-align: center;
+}
+#calendar td.today {
+   background-color: #ffc !important;
+   font-size: 0.9em;
+}
+#calendar td.noday {
+   background-color: #ccc !important;
+}
+#calendar tr.calendar-days td.normal {
+   width: 140px;
+   height: 100px;
+   background-color: #fff;
+   font-size: 0.9em;
+}
+#calendar tr.calendar-days td.sunday {
+   width: 80px;
+   height: 100px;
+   background-color: #eee;
+   font-size: 0.9em;
+}
+#calendar div.calendar-number {
+   font-size: 1em;
+   font-weight: bold;
+   float: right;
+   padding: 0.2em 0.5em;
+   border: 1px solid #ccc;
+   margin-top: -5px;
+   margin-right: -5px;
+   background-color: #eee;
+}
+
+/* Teams */
+#header_teams div.teams { padding-left:35px; height: 30px; background: url(../img/logos.png) no-repeat top left; background-position: -999px -999px; }
+#header_teams div.angels { background-position: 0 0; }
+#header_teams div.d-backs { background-position: 0 -55px; }
+#header_teams div.braves { background-position: 0 -110px; }
+#header_teams div.orioles { background-position: 0 -165px; }
+#header_teams div.red-sox { background-position: 0 -220px; }
+#header_teams div.cubs { background-position: 0 -275px; }
+#header_teams div.reds { background-position: 0 -330px; }
+#header_teams div.indians { background-position: 0 -385px; }
+#header_teams div.rockies { background-position: 0 -440px; }
+#header_teams div.white-sox { background-position: 0 -495px; }
+#header_teams div.tigers { background-position: 0 -550px; }
+#header_teams div.marlins { background-position: 0 -605px; }
+#header_teams div.marlins1 { background-position: 0 -1653px; }
+#header_teams div.astros { background-position: 0 -660px; }
+#header_teams div.royals { background-position: 0 -715px; }
+#header_teams div.dodgers { background-position: 0 -770px; }
+#header_teams div.brewers { background-position: 0 -825px; }
+#header_teams div.twins { background-position: 0 -880px; }
+#header_teams div.mets { background-position: 0 -935px; }
+#header_teams div.yankees { background-position: 0 -990px; }
+#header_teams div.a-s { background-position: 0 -1045px; }
+#header_teams div.phillies { background-position: 0 -1100px; }
+#header_teams div.pirates { background-position: 0 -1155px; }
+#header_teams div.padres { background-position: 0 -1210px; }
+#header_teams div.mariners { background-position: 0 -1265px; }
+#header_teams div.giants { background-position: 0 -1320px; }
+#header_teams div.cardinals { background-position: 0 -1375px; }
+#header_teams div.rays { background-position: 0 -1430px; }
+#header_teams div.rangers { background-position: 0 -1485px; }
+#header_teams div.blue-jays { background-position: 0 -1540px; }
+#header_teams div.nationals { background-position: 0 -1595px; }

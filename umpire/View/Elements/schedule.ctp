@@ -23,20 +23,9 @@ $startTable = false;
 	</table>
 	</div>
 	<?php else: ?>
-		<?php if ($week): ?>
-			<h2>Upcoming Schedule</h2>
-		<?php else: ?>
-			<h2>Schedule This Week</h2>
-   		<?php endif; ?>
-
-		<div class="pagination">
-   			<ul>
-   				<?php if ($week): ?>
-				<li><?php echo $this->Html->link('<< Previous Week', array('controller' => 'games', 'action' => 'assign_games', $week - 1)); ?></li>
-				<?php endif; ?>
-				<li><?php echo $this->Html->link('Next Week >>', array('controller' => 'games', 'action' => 'assign_games', $week + 1)); ?></li>
-			</ul>
-		</div>
+		<?php if (!empty($title)): ?>
+		<h2><?php echo $title ?></h2>
+		<?php endif; ?>
 	<?php endif; ?>
 	<?php $startTable = true; ?>
 	<?php $dayBreak = true; ?>
@@ -47,12 +36,11 @@ $startTable = false;
 		<thead>
 		<tr>
 			<th width="10%">Game ID</th>
-			<th width="15%">Game Time</th>
-			<th width="15%">Home Team</th>
-			<th width="15%">Away Team</th>
-			<th width="15%">Field</th>
-			<th width="15%">Umpire</th>
-			<th width="15%">All Umpires</th>
+			<th width="10%">Game Time</th>
+			<th width="17%">Home Team</th>
+			<th width="17%">Away Team</th>
+			<th width="20%">Field</th>
+			<th width="25%">Umpire</th>
 		</tr>
 		</thead>
 		<tbody>
@@ -60,7 +48,7 @@ $startTable = false;
 
 	<?php if ($dayBreak): ?>
 		<tr style="background-color: #ffffff">
-		   <th colspan="7" align="center">
+		   <th colspan="6" align="center">
 		   	<h4><?php echo $textDate ?></h4>
 		   </th>
 		</tr>
@@ -94,22 +82,6 @@ $startTable = false;
 		<td>
 		   <?php if (isset($game['Schedule']['umpire_id'])): ?>
 		      <strong><?php echo $umpires[$game['Schedule']['umpire_id']]; ?></strong>
-		      <br><?php echo $this->Html->link('<i class="icon-remove-sign icon-white"></i> Unassign', array('controller' => 'games', 'action' => 'unassign', $game['Schedule']['id']), array('escape' => false, 'class' => 'btn btn-danger btn-mini'))?>
-		   <?php else: ?>
-		      <?php $available = @Set::diff($requests[$game['Game']['game_time']], $schedules[$game['Game']['game_time']]) ?>
-		      <?php foreach ($available as $id => $name): ?>
-		         <?php echo $this->Html->link($name, array('controller' => 'games', 'action' => 'assign', $game['Game']['id'], $id)), '<br/>' ?>
-		      <?php endforeach; ?>
-	      <?php endif; ?>
-		   &nbsp;
-		</td>
-		<td>
-		   <?php if (!isset($game['Schedule']['umpire_id'])): ?>
-		      <?php foreach ($umpires as $id => $name): ?>
-		      <?php if (!in_array($id, $available)): ?>
-	   	    	  <?php echo $this->Html->link($name, array('controller' => 'games', 'action' => 'assign', $game['Game']['id'], $id)), '<br/>' ?>
-	   	  		<?php endif; ?>
-	      	<?php endforeach; ?>
 	      <?php endif; ?>
 		   &nbsp;
 		</td>

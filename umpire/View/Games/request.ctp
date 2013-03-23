@@ -1,8 +1,5 @@
 <?php
    echo $this->Html->css('jquery.tooltip.css');
-
-   echo $this->Html->script('jquery.bgiframe.pack.js');
-   echo $this->Html->script('jquery.dimension.pack.js');
    echo $this->Html->script('jquery.tooltip.pack.js');
 ?>
 <div class="games index">
@@ -12,52 +9,6 @@ jQuery(function($) {
 	$('#calendar a').tooltip({showURL:false});
 });
 </script>
-<style>
-#calendar td {
-   border:1px solid #ddd;
-}
-tr.calendar-header td {
-   background-color: #660099;
-	color: #ffffff;
-	text-align: center;
-}
-td.today {
-   background-color: #ffc !important;
-   font-size: 0.9em;
-}
-td.noday {
-   background-color: #aaa !important;
-}
-tr.calendar-days td.normal {
-   width: 140px;
-   height: 100px;
-   background-color: #fff;
-   font-size: 0.9em;
-}
-tr.calendar-days td.sunday {
-   width: 80px;
-   height: 100px;
-   background-color: #fff;
-   font-size: 0.9em;
-}
-div.calendar-number {
-   font-size: 1em;
-   font-weight: bold;
-   float: right;
-   padding: 0.2em 0.5em;
-   border: 1px solid #000;
-   margin-top: -5px;
-   margin-right: -5px;
-   background-color: #eee;
-}
-#month-name {
-   font-size: 2em;
-   font-weight: bold;
-   text-align: center;
-   width: inherit;
-   padding-bottom: 10px;
-}
-</style>
 <?php
 	$currentMonth = date('n');
 	$currentYear = date('Y');
@@ -67,12 +18,12 @@ div.calendar-number {
 	// Build an array of calendar days
 	for ($day = 1; $day <= 31; $day++)
 	{
-		// Don't continue if past end of month 
+		// Don't continue if past end of month
 	  if (checkdate($month, $day, $year) == false)
 	  {
 	    break;
 	  }
-	
+
 		// Place the date in the week and day array
 	  $dayNum = date('w', mktime(0, 0, 0, $month, $day, $year));
 	  if ($dayNum == 0 and $day > 1)
@@ -81,7 +32,7 @@ div.calendar-number {
 	  }
 	  $days[$week][$dayNum] = $day;
 	}
-	
+
 	// build the url
 	$url = array(
 		3 => '/games/request/march',
@@ -92,32 +43,30 @@ div.calendar-number {
 ?>
 
 <?php echo $this->Form->create('Game', array('url' => $url[$month])); ?>
-<fieldset>
 
-<?php if ($month == 3): ?>
-	<legend>March Requests</legend>
-   <?php echo $this->Html->link('April >', '/games/request/april') ?>
-<?php elseif ($month == 4): ?>
-   <legend>April Requests</legend>
-   <?php echo $this->Html->link('< March', '/games/request/march') ?>
-   <?php echo $this->Html->link('May >', '/games/request/may') ?>
-<?php elseif ($month == 5): ?>            
-   <legend>May Requests</legend>
-   <?php echo $this->Html->link('< April', '/games/request/april') ?>
-   <?php echo $this->Html->link('June >', '/games/request/june') ?>
-<?php elseif ($month == 6): ?>            
-   <legend>June Requests</legend>
-   <?php echo $this->Html->link('< May', '/games/request/may') ?>
-<?php endif; ?>
 
-   <p>&nbsp;</p>
-   <p>Click on the days and times that you are available to work. You have until 
-   Friday of each week to make your requests for the next weeks schedule, then click 
-   the <strong>Submit Requests</strong> button. If you do not click the <strong>Submit Requests</strong> 
+<h3><?php echo date('F', mktime(0, 0, 0, $month, 1, 2013)) ?></h3>
+
+<div class="pagination">
+   <ul>
+      <?php foreach (range(3,6) as $key): ?>
+         <?php $month_name = date('F', mktime(0, 0, 0, $key, 1, 2013)) ?>
+         <?php if ($month == $key): ?>
+            <li class="active"><span><?php echo $month_name ?></span></li>
+         <?php else: ?>
+            <li><?php echo $this->Html->link($month_name, array('controller' => 'games', 'action' => 'request', strtolower($month_name))) ?></li>
+         <?php endif; ?>
+      <?php endforeach; ?>
+   </ul>
+</div>
+
+   <p>Click on the days and times that you are available to work. You have until
+   Friday of each week to make your requests for the next weeks schedule, then click
+   the <strong>Submit Requests</strong> button. If you do not click the <strong>Submit Requests</strong>
    you requests will not be saved.</p>
    <p>&nbsp;</p>
 
-   <table id="calendar" cellspacing="1" cellpadding="2" bgcolor="#000" style="font-family: verdana; font-size: 8pt; color: rgb(0, 0, 102);">
+   <table id="calendar" class="table table-condensed table->bordered">
       <tbody>
          <tr align="center" class="calendar-header">
             <td>Sunday</td>
@@ -133,7 +82,7 @@ div.calendar-number {
    <tr valign="top" class="calendar-days">
    <?php for ($d = 0; $d < 7; $d++): ?>
       <?php if (isset($days[$w][$d])): ?>
-      <?php 
+      <?php
          $now = $days[$w][$d];
 
          $times = '';
@@ -165,6 +114,6 @@ div.calendar-number {
 
       </tbody>
    </table>
-   </fieldset>
-   <?php echo $this->Form->end('Submit Requests'); ?>
+   <button type="submit" class="btn btn-primary"><i class="icon-thumbs-up icon-white"></i> Submit Requests</button>
+   </form>
 </div>

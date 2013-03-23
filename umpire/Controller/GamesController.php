@@ -1,9 +1,7 @@
 <?php
 class GamesController extends AppController
 {
-	var $name = 'Games';
-
-	function beforeFilter()
+	public function beforeFilter()
 	{
 		$this->Auth->allow('schedule');
 		parent::beforeFilter();
@@ -13,7 +11,7 @@ class GamesController extends AppController
 	 * Handle display and saving requests
 	 * @param $month
 	 */
-	function request($month = null)
+	public function request($month = null)
 	{
 		$this->loadModel('Request');
 		$umpire_id = $this->Auth->user('id');
@@ -35,7 +33,7 @@ class GamesController extends AppController
 				$this->Request->remove($umpire_id, $date);
 			}
 
-			$this->Session->setFlash('Thank you. Your requests have been saved');
+			$this->Session->setFlash('Thank you. Your requests have been saved. Please check your schedule Sunday night.', 'flash_success');
 		}
 
 		// Build the calendar
@@ -110,10 +108,11 @@ class GamesController extends AppController
 	/**
 	 * schedule this week
 	 */
-	function schedule()
+	public function schedule()
 	{
 		$conditions = array(
-			'WEEK(Game.game_time) BETWEEN WEEK(CURRENT_DATE()) AND WEEK(CURRENT_DATE()) + 1',
+			//'WEEK(Game.game_time) BETWEEN WEEK(CURRENT_DATE()) AND WEEK(CURRENT_DATE()) + 1',
+			'Week(Game.game_time) BETWEEN 17 AND 17',
 			'Game.league_id' => array(4, 5, 6),
 		);
 		$order = array('Game.league_id', 'Game.game_time');
@@ -132,16 +131,18 @@ class GamesController extends AppController
 	/**
 	 * Show my schedule
 	 */
-	function myschedule($week = 0)
+	public function myschedule($week = 0)
 	{
 		$conditions = array(
-			'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
-			'Schedule.umpire_id' => $this->Auth->user('id'),
+			//'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
+			'Week(Game.game_time) BETWEEN 17 AND 17',
+			'Schedule.umpire_id' => 13//$this->Auth->user('id'),
 		);
 		$order = array('Game.league_id', 'Game.game_time');
 		$this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', array('Schedule' => array('Umpire' => 'Request')));
 		$games = $this->Game->find('all', compact('conditions', 'order'));
 		$this->set('games', $games);
+		$this->set('umpires', array(13 => 'Me'));
 	}
 
 	/**
@@ -149,11 +150,11 @@ class GamesController extends AppController
 	 * @param $game_id
 	 * @param $umpire_id
 	 */
-	function assign($game_id, $umpire_id)
+	public function assign($game_id, $umpire_id)
 	{
 		if ($this->Auth->user('role') != 'admin')
 		{
-			$this->Session->setFlash('You are not authorized to access that location.');
+			$this->Session->setFlash('You are not authorized to access that location.', 'flash_fail');
 			$this->redirect('/');
 		}
 
@@ -182,42 +183,44 @@ class GamesController extends AppController
 		$this->Schedule->create();
 		$this->Schedule->save($schedule);
 
-		$this->Session->setFlash('New game assigned');
+		$this->Session->setFlash('New game assigned', 'flash_success');
 		$this->redirect($this->referer());
 	}
 
-	function unassign($schedule_id)
+	public function unassign($schedule_id)
 	{
 		$this->loadModel('Schedule');
 		$this->Schedule->id = $schedule_id;
 		$this->Schedule->delete();
 
-		$this->Session->setFlash('Game unassigned');
+		$this->Session->setFlash('Game unassigned', 'flash_info');
 		$this->redirect($this->referer());
 	}
 
 	/**
 	 * Show the games this week and those available
 	 */
-	function assign_games($week = 0)
+	public function assign_games($week = 0)
 	{
 		set_time_limit(0);
 		$this->loadModel('Request');
 //      $order = array('Game.game_time', 'Schedule.umpire_id');
 		$order = array();
+		$this->Request->contain('Umpire');
 		$requests = $this->Request->find('all', compact('order'));
 		$requests = Set::combine($requests, '{n}.Umpire.id', array('{0}: {1} ({2})', '{n}.Umpire.id', '{n}.Umpire.name', '{n}.Umpire.age'), '{n}.Request.game_time');
 
 		$this->loadModel('Schedule');
+		$this->Schedule->contain('Umpire');
 		$schedules = $this->Schedule->find('all', compact('order'));
 		$schedules = Set::combine($schedules, '{n}.Umpire.id', array('{0}: {1} ({2})', '{n}.Umpire.id', '{n}.Umpire.name', '{n}.Umpire.age'), '{n}.Game.game_time');
 
 		$conditions = array(
-			'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
+			//'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
+			'WEEK(Game.game_time) = 17',
 			'Game.league_id' => array(4, 5, 6),
 		);
 		$order = array('Game.league_id', 'Game.game_time');
-//      $this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', array('Schedule' => array('Umpire' => 'Request')));
 		$this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', 'Schedule');
 		$games = $this->Game->find('all', compact('conditions', 'order'));
 
@@ -234,7 +237,7 @@ class GamesController extends AppController
 	/**
 	 * Show this week's schedule
 	 */
-	function thisweek1()
+	public function thisweek1()
 	{
 		$conditions = array(
 			'WEEK(game_time) = WEEK(CURRENT_DATE())+1',

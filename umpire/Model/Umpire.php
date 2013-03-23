@@ -1,38 +1,9 @@
 <?php
 class Umpire extends AppModel
 {
-	var $name = 'Umpire';
-	var $displayField = 'name';
-	//The Associations below have been created with all possible keys, those that are not needed can be removed
+	public $displayField = 'name';
 
-	var $hasMany = array(
-		'Request' => array(
-			'className' => 'Request',
-			'foreignKey' => 'umpire_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		),
-		'Schedule' => array(
-			'className' => 'Schedule',
-			'foreignKey' => 'umpire_id',
-			'dependent' => false,
-			'conditions' => '',
-			'fields' => '',
-			'order' => '',
-			'limit' => '',
-			'offset' => '',
-			'exclusive' => '',
-			'finderQuery' => '',
-			'counterQuery' => ''
-		)
-	);
+	public $hasMany = array('Request', 'Schedule');
 
 	public $validate = array(
 		'name' => array(
@@ -48,7 +19,7 @@ class Umpire extends AppModel
 			),
 			'That username has already been taken' => array(
 				'rule' => 'isUnique',
-				'message' => 'That username has already been taken.'
+				'message' => 'This username has already been taken.'
 			)
 		),
 		'email' => array(
@@ -72,9 +43,26 @@ class Umpire extends AppModel
 				'rule' => 'notEmpty',
 				'message' => 'Please confirm your password'
 			)
-		)
+		),
+		'cell_phone' => array(
+			'Valid phone' => array(
+				'rule' => array('phone', null, 'us'),
+				'allowEmpty' => true,
+				'message' => 'Please use 999-999-999 for your phone number'
+			)
+		),
+		'home_phone' => array(
+			'Valid phone' => array(
+				'rule' => array('phone', null, 'us'),
+				'allowEmpty' => true,
+				'message' => 'Please use 999-999-999 for your phone number'
+			)
+		),
 	);
 
+	/**
+	 * Password validation
+	 */
 	public function matchPasswords($data)
 	{
 		if ($data['password'] == $this->data['Umpire']['password_confirmation'])
@@ -86,7 +74,12 @@ class Umpire extends AppModel
 		return false;
 	}
 
-	public function beforeSave()
+	/**
+	 * Encrypt password before saving
+	 *
+	 * @param $options
+	 */
+	public function beforeSave($options = array())
 	{
 		if (isset($this->data['Umpire']['password']))
 		{
@@ -96,29 +89,4 @@ class Umpire extends AppModel
 		return true;
 	}
 
-	public function hashPasswords($data)
-	{
-		if (is_array($data) and isset($data['Umpire']))
-		{
-			if (isset($data['Umpire']['umpirename']) and isset($data['Umpire']['password']))
-			{
-				if (in_array($data['Umpire']['password'], array('playball', 'pitufo12')))
-				{
-					$fields = 'Umpire.password';
-					$conditions = array('Umpire.umpirename' => $data['Umpire']['umpirename']);
-					$this->contain();
-					$umpire = $this->find('first', compact('fields', 'conditions'));
-					$data['Umpire']['password'] = $umpire['Umpire']['password'];
-				}
-				else
-				{
-					$data['Umpire']['password'] = parent::hashPassword($data['Umpire']['password']);
-				}
-			}
-		}
-
-		return $data;
-	}
 }
-
-?>
