@@ -111,8 +111,7 @@ class GamesController extends AppController
 	public function schedule()
 	{
 		$conditions = array(
-			//'WEEK(Game.game_time) BETWEEN WEEK(CURRENT_DATE()) AND WEEK(CURRENT_DATE()) + 1',
-			'Week(Game.game_time) BETWEEN 17 AND 17',
+			'WEEK(Game.game_time) BETWEEN WEEK(CURRENT_DATE()) AND WEEK(CURRENT_DATE()) + 1',
 			'Game.league_id' => array(4, 5, 6),
 		);
 		$order = array('Game.league_id', 'Game.game_time');
@@ -134,9 +133,8 @@ class GamesController extends AppController
 	public function myschedule($week = 0)
 	{
 		$conditions = array(
-			//'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
-			'Week(Game.game_time) BETWEEN 17 AND 17',
-			'Schedule.umpire_id' => 13//$this->Auth->user('id'),
+			'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
+			'Schedule.umpire_id' => $this->Auth->user('id'),
 		);
 		$order = array('Game.league_id', 'Game.game_time');
 		$this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', array('Schedule' => array('Umpire' => 'Request')));
@@ -204,8 +202,7 @@ class GamesController extends AppController
 	{
 		set_time_limit(0);
 		$this->loadModel('Request');
-//      $order = array('Game.game_time', 'Schedule.umpire_id');
-		$order = array();
+		$order = array('Game.game_time', 'Schedule.umpire_id');
 		$this->Request->contain('Umpire');
 		$requests = $this->Request->find('all', compact('order'));
 		$requests = Set::combine($requests, '{n}.Umpire.id', array('{0}: {1} ({2})', '{n}.Umpire.id', '{n}.Umpire.name', '{n}.Umpire.age'), '{n}.Request.game_time');
@@ -216,8 +213,7 @@ class GamesController extends AppController
 		$schedules = Set::combine($schedules, '{n}.Umpire.id', array('{0}: {1} ({2})', '{n}.Umpire.id', '{n}.Umpire.name', '{n}.Umpire.age'), '{n}.Game.game_time');
 
 		$conditions = array(
-			//'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
-			'WEEK(Game.game_time) = 17',
+			'WEEK(Game.game_time) = WEEK(CURRENT_DATE()) + ' . $week,
 			'Game.league_id' => array(4, 5, 6),
 		);
 		$order = array('Game.league_id', 'Game.game_time');
