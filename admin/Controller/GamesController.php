@@ -210,6 +210,12 @@ class GamesController extends AppController
 
 	private function _load_baberuth($league_id, $filename)
 	{
+		if ($this->request->data['Game']['filename']['type'] != 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+		{
+			$this->Session->setFlash('Invalid file type. Must be xlsx.');
+			return;
+		}
+
 		App::uses('SimpleXLSX', 'Lib');
 		$xlsx = new SimpleXLSX($filename);
 		$rows = $xlsx->rows();
@@ -340,10 +346,11 @@ class GamesController extends AppController
 		{
 			$this->loadModel('Team');
 			$this->Team->contain();
-			$teams = $this->Team->find('all', array('conditions' => array('Team.league_id' => $league_id)));
-			$teams = Set::combine($teams, '{n}.Team.name', '{n}.Team.team_id');
+			$teams = $this->Team->find('all', array('fields' => array('Team.team_id', 'LOWER(Team.name) AS name'), 'conditions' => array('Team.league_id' => $league_id)));
+			$teams = Set::combine($teams, '{n}.0.name', '{n}.Team.team_id');
 		}
 
+		$name = strtolower($name);
 		return empty($teams[$name]) ? $name : $teams[$name];
 	}
 

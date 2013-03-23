@@ -9,6 +9,7 @@
 		echo $this->Form->input('id');
 		//echo $this->Form->input('allstar_tryout');
 		echo $this->Form->input('accelerated_tryout');
+		echo $this->Form->input('accelerated_team_id', array('empty' => 'Not Assigned', 'options' => $accelerated_teams));
 		echo $this->Form->submit('Submit');
 
 		echo $this->Form->input('first_name');
@@ -23,12 +24,12 @@
 		echo $this->Form->input('evening_phone', array('label' => 'Evening Phone (e.g. 801-555-1212)'));
 		echo $this->Form->input('cell_phone', array('label' => 'Cell Phone (e.g. 801-555-1212)'));
 		echo $this->Form->input('email');
-      echo $this->Form->input('jersey_name');
-      echo $this->Form->input('shirt_size', array('options' => $shirts));
+		echo $this->Form->input('jersey_name');
+		echo $this->Form->input('shirt_size', array('options' => $shirts));
 		echo $this->Form->input('pant_size', array('options' => $pants, 'empty' => '- Select Size -'));
 		echo $this->Form->input('league_id', array('empty' => '- Select League -'));
-   	echo $this->Form->input('team_id', array('empty' => 'Tryout or Not Assigned'));
-   	echo $this->Form->input('last_team');
+		echo $this->Form->input('team_id', array('empty' => 'Tryout or Not Assigned'));
+		echo $this->Form->input('last_team');
    ?>
    <fieldset>
       <legend>Family</legend>

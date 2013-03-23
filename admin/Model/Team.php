@@ -18,6 +18,13 @@ class Team extends AppModel
 		'list_name' => 'CONCAT(Team.name, " (", Team.coach, ")")'
 	);
 
+	public $actsAs = array(
+		'Sluggable' => array(
+			'title_field' => 'name',
+			'separator' => '-'
+		)
+	);
+
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
 	/**
