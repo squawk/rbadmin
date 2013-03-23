@@ -32,5 +32,6 @@ App::uses('Model', 'Model');
  */
 class AppModel extends Model
 {
-	var $actsAs = array('Containable');
+	public $actsAs = array('Containable');
+	public $recursive = -1;
 }

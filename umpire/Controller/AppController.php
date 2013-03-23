@@ -33,18 +33,19 @@ App::uses('Controller', 'Controller');
  */
 class AppController extends Controller
 {
-	public $helpers = array('Session', 'Html', 'Form', 'Time', 'Js');
-	public $components = array('Session', 'RequestHandler',
+	public $helpers = array('Session', 'Html', 'Form', 'Time', 'Js', 'Session' => array('className' => 'MySession'));
+	public $components = array('RequestHandler', 'Cookie',
+		'Session' => array('className' => 'MySession'),
 		'Auth' => array(
 			'loginAction' => array(
 				'controller' => 'umpires',
 				'action' => 'login',
 			),
 			'loginRedirect' => array(
-				'controller' => 'pages',
-				'action' => 'home',
+				'controller' => 'games',
+				'action' => 'myschedule',
 			),
-
+			'logoutRedirect' => '/',
 			'authenticate' => array(
 				'Form' => array('userModel' => 'Umpire'),
 			),
@@ -53,12 +54,16 @@ class AppController extends Controller
 
 	function beforeFilter()
 	{
+		$this->Cookie->name = 'RBUmpire';
+
 		if ($this->Auth->user('id'))
 		{
 			$this->set('user_id', $this->Auth->user('id'));
 			$this->set('username', $this->Auth->user('username'));
 			$this->set('login_name', $this->Auth->user('name'));
 		}
+
+		$this->Auth->allow('display');
 	}
 
 }

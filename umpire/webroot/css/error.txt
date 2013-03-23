@@ -1,0 +1,6 @@
+A less error occured trying to build your bundle. You've likely entered an invalid input into the less variable field. Check your syntax and try again!
+
+ thanks!
+
+
+{"type":"Name","message":"variable @lightGray is undefined","filename":"bootstrap.css","index":9439,"line":311,"column":23,"extract":["@navbarLinkColor: #ffffff;","@navbarLinkColorHover: @lightGray;","@navbarLinkColorActive: #ffffff;"]}

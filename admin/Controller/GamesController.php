@@ -51,12 +51,12 @@ class GamesController extends AppController
 			$this->Game->create();
 			if ($this->Game->save($this->request->data))
 			{
-				$this->Session->setFlash(__('The game has been saved'));
+				$this->Session->setFlash(__('The game has been saved'), 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			}
 			else
 			{
-				$this->Session->setFlash(__('The game could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The game could not be saved. Please, try again.'), 'flash_fail');
 			}
 		}
 		$leagues = $this->Game->League->find('list');
@@ -81,12 +81,12 @@ class GamesController extends AppController
 		{
 			if ($this->Game->save($this->request->data))
 			{
-				$this->Session->setFlash(__('The game has been saved'));
+				$this->Session->setFlash(__('The game has been saved'), 'flash_success');
 				$this->redirect(array('action' => 'index'));
 			}
 			else
 			{
-				$this->Session->setFlash(__('The game could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('The game could not be saved. Please, try again.'), 'flash_fail');
 			}
 		}
 		else
@@ -117,10 +117,10 @@ class GamesController extends AppController
 		}
 		if ($this->Game->delete())
 		{
-			$this->Session->setFlash(__('Game deleted'));
-			$this->redirect(array('action' => 'index'));
+			$this->Session->setFlash(__('Game deleted'), 'flash_info');
+			return $this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Game was not deleted'));
+		$this->Session->setFlash(__('Game was not deleted'), 'flash_fail');
 		$this->redirect(array('action' => 'index'));
 	}
 

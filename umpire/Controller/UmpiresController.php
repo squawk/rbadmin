@@ -24,7 +24,7 @@ class UmpiresController extends AppController
 			}
 			else
 			{
-				$this->Session->setFlash(__('Username or password is incorrect'), 'default', array(), 'auth');
+				$this->Session->setFlash(__('Username or password is incorrect'), 'flash_fail');
 			}
 		}
 	}
@@ -34,7 +34,6 @@ class UmpiresController extends AppController
 	 */
 	public function logout()
 	{
-		$this->Session->setFlash('You have successfully logged out.');
 		$this->redirect($this->Auth->logout());
 	}
 
@@ -53,12 +52,12 @@ class UmpiresController extends AppController
 		{
 			if ($this->Umpire->save($this->request->data))
 			{
-				$this->Session->setFlash(__('Your profile has been saved'));
+				$this->Session->setFlash(__('Your profile has been saved'), 'flash_success');
 				$this->redirect('/');
 			}
 			else
 			{
-				$this->Session->setFlash(__('Your profile could not be saved. Please, try again.'));
+				$this->Session->setFlash(__('Your profile could not be saved. Please, try again.'), 'flash_fail');
 				unset($this->request->data['Umpire']['password']);
 				unset($this->request->data['Umpire']['password_confirmation']);
 			}
@@ -85,12 +84,12 @@ class UmpiresController extends AppController
 			$this->Umpire->create();
 			if ($this->Umpire->save($this->request->data))
 			{
-				$this->Session->setFlash(__('Your account has been created'));
+				$this->Session->setFlash(__('Your account has been created'), 'flash_success');
 				$this->redirect(array('action' => 'login'));
 			}
 			else
 			{
-				$this->Session->setFlash(__('Your account could not be created. Please, try again.'));
+				$this->Session->setFlash(__('Your account could not be created. Please, try again.'), 'flash_fail');
 			}
 		}
 	}
