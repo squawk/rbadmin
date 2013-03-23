@@ -112,7 +112,7 @@ class PlayersController extends AppController {
 			if ($this->Player->save($this->request->data))
 			{
 				$this->Session->setFlash(__('%s %s has been saved', $this->request->data['Player']['first_name'], $this->request->data['Player']['last_name']));
-				$this->redirect(array('action' => 'index'));
+				//$this->redirect(array('action' => 'index'));
 			}
 			else
 			{
@@ -125,14 +125,15 @@ class PlayersController extends AppController {
 			$this->request->data = $this->Player->read(null, $id);
 			$this->request->data['Player']['birthdate'] = date('n/j/Y', strtotime($this->request->data['Player']['birthdate']));
 		}
-		$leagues = $this->Player->League->find('list');
+		$leagues = $this->Player->League->find('list', array('conditions' => array('id < 10')));
 		$teams = array();
 		if ($this->request->data['Player']['team_id'] or $this->request->data['Player']['league_id'])
 		{
 		   $conditions = array('Team.league_id' => $this->request->data['Player']['league_id']);
 		   $teams = $this->Player->Team->find('list', compact('conditions'));
 		}
-		$this->set(compact('leagues', 'teams'));
+		$accelerated_teams = $this->Player->Team->find('list', array('conditions' => array('league_id' => 10)));
+		$this->set(compact('leagues', 'teams', 'accelerated_teams'));
 	}
 
    /**
@@ -387,6 +388,19 @@ class PlayersController extends AppController {
          $league_id = $this->data['Player']['league_id'];
       }
 
+      if ($league_id == 10)
+      {
+         $conditions = array('Player.accelerated_team_id > 0');
+         $order = array('Player.accelerated_team_id', 'Player.last_name ');
+         $accelerated_teams = $this->Player->Team->find('list', array('conditions' => array('league_id' => 10)));
+         $allPlayers = $this->Player->find('all', compact('conditions', 'order'));
+         foreach ($allPlayers as $p)
+         {
+         	$players[$accelerated_teams[$p['Player']['accelerated_team_id']]][] = $p;
+         }
+         $this->set('players', $players);
+         $this->set('league', $this->Player->League->findById($league_id));
+      }
       if ($league_id > 0)
       {
          $conditions = array('Player.league_id' => $league_id);

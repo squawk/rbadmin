@@ -3,7 +3,6 @@ class Player extends AppModel
 {
 	var $name = 'Player';
 	var $displayField = 'last_name';
-	public $cacheQueries = true;
 	var $validate = array(
 		'first_name' => array(
 			'notempty' => array(
