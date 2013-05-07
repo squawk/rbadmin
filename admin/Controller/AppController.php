@@ -33,7 +33,7 @@
 class AppController extends Controller
 {
 	var $helpers = array('Session', 'Html', 'Form', 'Time', 'Js' => array('MyJquery'), 'Pdf');
-	var $components = array('Session', 'RequestHandler',
+	var $components = array('Session', 'RequestHandler', 'Cookie',
 		'Auth'); //=> array('loginRedirect' => array('controller' => 'players','action' => 'index',)));
 
 	function beforeFilter()

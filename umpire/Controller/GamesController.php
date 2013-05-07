@@ -202,7 +202,8 @@ class GamesController extends AppController
 	{
 		set_time_limit(0);
 		$this->loadModel('Request');
-		$order = array('Game.game_time', 'Schedule.umpire_id');
+		//$order = array('Game.game_time', 'Schedule.umpire_id');
+		$order = array();
 		$this->Request->contain('Umpire');
 		$requests = $this->Request->find('all', compact('order'));
 		$requests = Set::combine($requests, '{n}.Umpire.id', array('{0}: {1} ({2})', '{n}.Umpire.id', '{n}.Umpire.name', '{n}.Umpire.age'), '{n}.Request.game_time');
@@ -219,6 +220,16 @@ class GamesController extends AppController
 		$order = array('Game.league_id', 'Game.game_time');
 		$this->Game->contain('TeamHome', 'TeamAway', 'Field', 'League', 'Schedule');
 		$games = $this->Game->find('all', compact('conditions', 'order'));
+
+		// Try it find start of season
+		if (empty($games))
+		{
+			$game = $this->Game->find('first', array('fields' => 'WEEK(MIN(Game.game_time)) - WEEK(CURRENT_DATE()) diff'));
+			if ($game[0]['diff'] > 0)
+			{
+				return $this->redirect(array('action' => 'assign_games', $game[0]['diff']));
+			}
+		}
 
 		$this->loadModel('Umpire');
 		$umpires = $this->Umpire->find('list');

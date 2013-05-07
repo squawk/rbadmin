@@ -35,7 +35,7 @@ jQuery(function($) {
 
 	// build the url
 	$url = array(
-		3 => '/games/request/march',
+//		3 => '/games/request/march',
 	   4 => '/games/request/april',
 	   5 => '/games/request/may',
 	   6 => '/games/request/june'
@@ -49,7 +49,7 @@ jQuery(function($) {
 
 <div class="pagination">
    <ul>
-      <?php foreach (range(3,6) as $key): ?>
+      <?php foreach (array_keys($url) as $key): ?>
          <?php $month_name = date('F', mktime(0, 0, 0, $key, 1, 2013)) ?>
          <?php if ($month == $key): ?>
             <li class="active"><span><?php echo $month_name ?></span></li>

@@ -126,7 +126,6 @@ class GamesController extends AppController
 
 	public function upload()
 	{
-
 		if ($this->request->is('post'))
 		{
 			$league_id = $this->request->data['Game']['league_id'];
@@ -164,7 +163,7 @@ class GamesController extends AppController
 		App::uses('SimpleXLSX', 'Lib');
 		$xlsx = new SimpleXLSX($filename);
 		$rows = $xlsx->rows();
-		$keys = array('date', 'time', 'field', 'home', 'v', 'away', 'type');
+		$keys = array('date', 'time', 'field', 'home', 'v', 'away', 'type', 'notes');
 		$skip = true;
 		$games = array();
 		$this->errors = array();
@@ -183,6 +182,11 @@ class GamesController extends AppController
 				}
 				$game = $this->_array_combine($keys, $r);
 
+				if (empty($game['home']))
+				{
+					continue;
+				}
+
 				$new_game['Game'] = array(
 					'league_id' => $league_id,
 					'home_team' => $this->_team($league_id, $game['home']),
@@ -190,6 +194,7 @@ class GamesController extends AppController
 					'field_id' => $this->_field($league_id, $game['field']),
 					'game_type' => $game['type'],
 					'game_time' => $this->_gametime($game['date'], $game['time']),
+					'notes' => $game['notes'],
 				);
 				$games[] = $new_game;
 			}
@@ -221,6 +226,7 @@ class GamesController extends AppController
 		$rows = $xlsx->rows();
 		$keys = array('field', 'time', 'sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat');
 		$games = array();
+
 		if ($rows)
 		{
 			foreach ($rows as $data)
@@ -228,7 +234,7 @@ class GamesController extends AppController
 				$row = $this->_array_combine($keys, $data);
 
 				// Calculate days
-				if ($row['field'] == 'Field')
+				if (strtolower($row['field']) == 'field')
 				{
 					$monday = trim(str_replace('Monday', '', $row['mon']));
 					$date = array(
@@ -286,11 +292,10 @@ class GamesController extends AppController
 							$new_field = trim(str_replace('@', '', $new_field));
 						}
 
-						$my_time = $date[$day] . ' ' . $time;
-
 						$split = explode('-', $teams);
 						if (count($split) > 1)
 						{
+							$my_time = $date[$day] . ' ' . $time;
 							$home = trim($split[0]);
 							$away = trim($split[1]);
 
@@ -332,7 +337,9 @@ class GamesController extends AppController
 				} // foreach
 			} // $rows
 
-			$this->Game->deleteAll(array('Game.league_id' => array(7, 8, 9)));
+			// Only delete leagues that we are replacing.
+			$leagues = array_unique(Hash::extract($games,'{n}.Game.league_id'));
+			$this->Game->deleteAll(array('Game.league_id' => $leagues));
 			$this->Game->saveAll($games);
 		}
 
@@ -350,7 +357,7 @@ class GamesController extends AppController
 			$teams = Set::combine($teams, '{n}.0.name', '{n}.Team.team_id');
 		}
 
-		$name = strtolower($name);
+		$name = strtolower(trim($name));
 		return empty($teams[$name]) ? $name : $teams[$name];
 	}
 
@@ -404,6 +411,22 @@ class GamesController extends AppController
 
 	private function _formatTime($t)
 	{
+		// Text format
+		if (stripos($t, 'pm'))
+		{
+			$replace = 'pm';
+		}
+		if (stripos($t, 'am'))
+		{
+			$replace = 'am';
+		}
+		if (isset($replace))
+		{
+			$t = str_ireplace($replace, '', $t);
+			return trim($t);
+		}
+
+		// Excel format
 		$hour = (int)($t * 24);
 		$minute = (int)((($t * 24) - $hour) * 60);
 

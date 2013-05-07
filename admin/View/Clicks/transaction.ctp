@@ -1,0 +1,9 @@
+<?php
+header("Content-type: image/gif");
+header("Content-length: 43");
+$fp = fopen("php://output","wb");
+fwrite($fp,"GIF89a\x01\x00\x01\x00\x80\x00\x00\xFF\xFF",15);
+fwrite($fp,"\xFF\x00\x00\x00\x21\xF9\x04\x01\x00\x00\x00\x00",12);
+fwrite($fp,"\x2C\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02\x02",12);
+fwrite($fp,"\x44\x01\x00\x3B",4);
+fclose($fp);

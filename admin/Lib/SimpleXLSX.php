@@ -2,13 +2,13 @@
 
 // SimpleXLSX php class v0.4
 // MS Excel 2007 workbooks reader
-// Example: 
+// Example:
 //   $xlsx = new SimpleXLSX('book.xlsx');
 //   print_r( $xlsx->rows() );
-// Example 2: 
+// Example 2:
 //   $xlsx = new SimpleXLSX('book.xlsx');
 //   print_r( $xlsx->rowsEx() );
-// Example 3: 
+// Example 3:
 //   $xlsx = new SimpleXLSX('book.xlsx');
 //   print_r( $xlsx->rows(2) ); // second worksheet
 //
@@ -26,7 +26,7 @@ class SimpleXLSX {
 	const SCHEMA_RELATIONSHIP  =  'http://schemas.openxmlformats.org/package/2006/relationships';
 	const SCHEMA_SHAREDSTRINGS =  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings';
 	const SCHEMA_WORKSHEETRELATION =  'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
-	
+
 	function __construct( $filename ) {
 		$this->_unzip( $filename );
 		$this->_parse();
@@ -40,14 +40,14 @@ class SimpleXLSX {
 	function worksheet( $worksheet_id ) {
 		if ( isset( $this->sheets[ $worksheet_id ] ) ) {
 			$ws = $this->sheets[ $worksheet_id ];
-			
+
 			if (isset($ws->hyperlinks)) {
 				$this->hyperlinks = array();
 				foreach( $ws->hyperlinks->hyperlink as $hyperlink ) {
 					$this->hyperlinks[ (string) $hyperlink['ref'] ] = (string) $hyperlink['display'];
 				}
 			}
-			
+
 			return $ws;
 		} else
 			throw new Exception('Worksheet '.$worksheet_id.' not found.');
@@ -56,24 +56,22 @@ class SimpleXLSX {
 		$ws = $this->worksheet($worksheet_id);
 		$ref = (string) $ws->dimension['ref'];
 		$d = explode(':', $ref);
-		$index = $this->_columnIndex( $d[1] );		
+		$index = $this->_columnIndex( $d[1] );
 		return array( $index[0]+1, $index[1]+1);
 	}
 	// sheets numeration: 1,2,3....
 	function rows( $worksheet_id = 1 ) {
-		
+
 		$ws = $this->worksheet( $worksheet_id);
-		
+
 		$rows = array();
 		$curR = 0;
-				
+
 		foreach ($ws->sheetData->row as $row) {
-			
 			foreach ($row->c as $c) {
 				list($curC,) = $this->_columnIndex((string) $c['r']);
 				$rows[ $curR ][ $curC ] = $this->value($c);
 			}
-			
 			$curR++;
 		}
 		return $rows;
@@ -84,7 +82,7 @@ class SimpleXLSX {
 		if (($ws = $this->worksheet( $worksheet_id)) === false)
 			return false;
 		foreach ($ws->sheetData->row as $row) {
-			
+
 			foreach ($row->c as $c) {
 				list($curC,) = $this->_columnIndex((string) $c['r']);
 				$rows[ $curR ][ $curC ] = array(
@@ -100,12 +98,12 @@ class SimpleXLSX {
 	}
 	// thx Gonzo
 	function _columnIndex( $cell = 'A1' ) {
-		
+
 		if (preg_match("/([A-Z]+)(\d+)/", $cell, $matches)) {
-			
+
 			$col = $matches[1];
 			$row = $matches[2];
-			
+
 			$colLen = strlen($col);
 			$index = 0;
 
@@ -129,7 +127,7 @@ class SimpleXLSX {
 				}
 
 				break;
-				
+
 			case "b":
 				// Value is boolean
 				$value = (string)$cell->v;
@@ -142,13 +140,13 @@ class SimpleXLSX {
 				}
 
 				break;
-				
+
 			case "inlineStr":
 				// Value is rich text inline
 				$value = $this->_parseRichText($cell->is);
-							
+
 				break;
-				
+
 			case "e":
 				// Value is an error message
 				if ((string)$cell->v != '') {
@@ -350,11 +348,11 @@ class SimpleXLSX {
 				// Found office document! Read relations for workbook...
 				$workbookRelations = simplexml_load_string($this->getEntryData( dirname($rel["Target"]) . "/_rels/" . basename($rel["Target"]) . ".rels") );
 				$workbookRelations->registerXPathNamespace("rel", SimpleXLSX::SCHEMA_RELATIONSHIP);
-				
+
 				// Read shared strings
 				$sharedStringsPath = $workbookRelations->xpath("rel:Relationship[@Type='" . SimpleXLSX::SCHEMA_SHAREDSTRINGS . "']");
-				$sharedStringsPath = (string)$sharedStringsPath[0]['Target'];              
-				$xmlStrings = simplexml_load_string($this->getEntryData( dirname($rel["Target"]) . "/" . $sharedStringsPath) );            
+				$sharedStringsPath = (string)$sharedStringsPath[0]['Target'];
+				$xmlStrings = simplexml_load_string($this->getEntryData( dirname($rel["Target"]) . "/" . $sharedStringsPath) );
 				if (isset($xmlStrings) && isset($xmlStrings->si)) {
 					foreach ($xmlStrings->si as $val) {
 						if (isset($val->t)) {
@@ -372,11 +370,11 @@ class SimpleXLSX {
 							simplexml_load_string( $this->getEntryData( dirname($rel["Target"]) . "/" . dirname($workbookRelation["Target"]) . "/" . basename($workbookRelation["Target"])) );
 					}
 				}
-				
+
 				break;
 			}
 		}
-		
+
 		// Sort sheets
 		ksort($this->sheets);
 	}

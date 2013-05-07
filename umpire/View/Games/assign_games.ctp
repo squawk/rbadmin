@@ -1,3 +1,7 @@
+<?php if (empty($games)): ?>
+<h2>Assign Games</h2>
+<p>No games found!</p>
+<?php else: ?>
 <div class="games">
 <?php
 $schedule = $this->params['action'] == 'schedule';
@@ -119,3 +123,4 @@ $startTable = false;
 </table>
 </div>
 </div>
+<?php endif; ?>
