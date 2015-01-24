@@ -163,7 +163,8 @@ class GamesController extends AppController
 		App::uses('SimpleXLSX', 'Lib');
 		$xlsx = new SimpleXLSX($filename);
 		$rows = $xlsx->rows();
-		$keys = array('date', 'time', 'field', 'home', 'v', 'away', 'type', 'notes');
+		//pr($rows); exit;
+		$keys = array('date', 'home', 'away', 'time', 'field', 'type');
 		$skip = true;
 		$games = array();
 		$this->errors = array();
@@ -171,7 +172,7 @@ class GamesController extends AppController
 		{
 			foreach ($rows as $r)
 			{
-				if ($r[0] == 'Date')
+				if ($r[0] == 'Match Date')
 				{
 					$skip = false;
 					continue;
@@ -181,6 +182,9 @@ class GamesController extends AppController
 					continue;
 				}
 				$game = $this->_array_combine($keys, $r);
+				if (empty($game['date'])) {
+					continue;
+				}
 
 				if (empty($game['home']))
 				{
@@ -194,11 +198,12 @@ class GamesController extends AppController
 					'field_id' => $this->_field($league_id, $game['field']),
 					'game_type' => $game['type'],
 					'game_time' => $this->_gametime($game['date'], $game['time']),
-					'notes' => $game['notes'],
+					//'notes' => $game['notes'],
 				);
 				$games[] = $new_game;
 			}
 
+//			pr($games); exit;
 			if (count($this->errors))
 			{
 				$this->Session->setFlash(implode('<br>', $this->errors));
@@ -389,7 +394,7 @@ class GamesController extends AppController
 		$time = $this->_formatTime($t);
 		if ($date == null)
 		{
-			$this->errors[] = 'Invalid game time: ' . $d;
+			$this->errors[] = 'Invalid game time: ' . $d . ' - ' . $t;
 
 			return null;
 		}
@@ -399,6 +404,12 @@ class GamesController extends AppController
 
 	private function _formatDate($d)
 	{
+		if (is_numeric($d)) {
+			$days = $d - 2;
+			$date = "1900-01-01";
+			return date('Y-m-d', strtotime($date. " + $days days"));
+		}
+		
 		$date = null;
 		$tmp = strtotime($d);
 		if ($tmp !== false)

@@ -49,7 +49,8 @@ class AppController extends Controller
 			'authenticate' => array(
 				'Form' => array('userModel' => 'Umpire'),
 			),
-		)
+		),
+		//'DebugKit.Toolbar'
 	);
 
 	function beforeFilter()

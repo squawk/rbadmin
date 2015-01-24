@@ -7,9 +7,9 @@
  		<?php if (!empty($this->data['Player']['txn_id'])): ?><p><strong style="color:blue">Paid with Paypal: txn_id=<?php echo $this->data['Player']['txn_id'] ?></strong></p><?php endif; ?>
 	<?php
 		echo $this->Form->input('id');
-		//echo $this->Form->input('allstar_tryout');
-		echo $this->Form->input('accelerated_tryout');
-		echo $this->Form->input('accelerated_team_id', array('empty' => 'Not Assigned', 'options' => $accelerated_teams));
+		echo $this->Form->input('allstar_tryout');
+		//echo $this->Form->input('accelerated_tryout');
+		//echo $this->Form->input('accelerated_team_id', array('empty' => 'Not Assigned', 'options' => $accelerated_teams));
 		echo $this->Form->submit('Submit');
 
 		echo $this->Form->input('first_name');

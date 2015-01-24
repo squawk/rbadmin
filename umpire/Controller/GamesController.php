@@ -42,7 +42,8 @@ class GamesController extends AppController
 		$week = date('W');
 		if (date('N') > 5)
 		{
-			$week++;
+			// I don't know what this was for
+			//$week++;
 		}
 
 		if (isset($months[$month]))
@@ -64,6 +65,7 @@ class GamesController extends AppController
 		$conditions = array(
 			'Game.league_id' => array(4, 5, 6),
 			'MONTH(Game.game_time)' => $month,
+			'YEAR(Game.game_time)' => $year,
 			'OR' => array(
 				'WEEK(Game.game_time) >' => $week,
 				array(

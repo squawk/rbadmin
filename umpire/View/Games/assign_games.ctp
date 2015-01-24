@@ -84,8 +84,20 @@ $startTable = false;
 		<?php echo $this->Time->format('g:i a', $game['Game']['game_time']); ?>
 		<?php if ($game['Game']['makeup']) echo '</strong>' ?>
 		</td>
-		<td><div class="teams <?php echo $game['TeamHome']['slug'] ?>"><?php echo $game['TeamHome']['name'] ?></div></td>
-		<td><div class="teams <?php echo $game['TeamAway']['slug'] ?>"><?php echo $game['TeamAway']['name'] ?></div></td>
+		<td>
+			<?php if (empty($game['TeamHome']['slug'])): ?>
+				<?php echo $game['Game']['home_team'] ?>
+			<?php else: ?>
+				<div class="teams <?php echo $game['TeamHome']['slug'] ?>"><?php echo $game['TeamHome']['name'] ?></div>
+			<?php endif; ?>
+		</td>
+		<td>
+			<?php if (empty($game['TeamAway']['slug'])): ?>
+				<?php echo $game['Game']['away_team'] ?>
+			<?php else: ?>
+				<div class="teams <?php echo $game['TeamAway']['slug'] ?>"><?php echo $game['TeamAway']['name'] ?></div>
+			<?php endif; ?>
+		</td>
 		<td>
 		<?php if ($game['Game']['cancelled']): ?>
 	      CANCELED

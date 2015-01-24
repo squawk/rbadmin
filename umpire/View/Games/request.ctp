@@ -45,7 +45,7 @@ jQuery(function($) {
 <?php echo $this->Form->create('Game', array('url' => $url[$month])); ?>
 
 
-<h3><?php echo date('F', mktime(0, 0, 0, $month, 1, 2013)) ?></h3>
+<h3><?php echo date('F Y', mktime(0, 0, 0, $month, 1, $currentYear)) ?></h3>
 
 <div class="pagination">
    <ul>

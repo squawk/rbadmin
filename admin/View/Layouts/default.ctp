@@ -63,7 +63,7 @@ $cakeDescription = __d('cake_dev', 'Riverton Baseball Administration');
 				<li><?php echo $this->Html->link('Team Rosters', array('controller' => 'players', 'action' => 'rosters'));?></li>
 				<li><?php echo $this->Html->link('List Teams', array('controller' => 'teams', 'action' => 'index'));?></li>
 				<li><?php echo $this->Html->link('Tryout List', array('controller' => 'players', 'action' => 'tryout'));?></li>
-				<!--<li><?php echo $this->Html->link('Allstar Tryout List', array('controller' => 'players', 'action' => 'allstar_tryout'));?></li>-->
+				<li><?php echo $this->Html->link('Allstar Tryout List', array('controller' => 'players', 'action' => 'allstar_tryout'));?></li>
 				<li><?php echo $this->Html->link('Accelerated Tryout List', array('controller' => 'players', 'action' => 'accelerated_tryout'));?></li>
 				<?php if ($user_id == 1): ?>
 				   <h4>Super Functions</h4>
